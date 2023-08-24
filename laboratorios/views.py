@@ -38,9 +38,24 @@ def laboratorio_list(request):
 
 
 
-@api_view(["GET"])
+@api_view(["GET", "PATCH", "DELETE"])
 def laboratorio_detail(request, id):
-    instance = get_object_or_404(Laboratorio.objects.filter(id=id)) 
-    serializer = LaboratorioSerializer(instance=instance, many=False)
+    instance = get_object_or_404(Laboratorio, id=id) 
 
-    return Response(serializer.data, status=status.HTTP_200_OK)
+    if request.method == "GET":
+        serializer = LaboratorioSerializer(instance=instance, many=False)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    elif request.method == "PATCH":
+        serializer = LaboratorioSerializer(instance=instance, data=request.data, many=False, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(request.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+    
+    elif request.method == "DELETE":
+        instance.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
