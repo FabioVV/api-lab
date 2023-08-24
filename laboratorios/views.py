@@ -40,7 +40,6 @@ def laboratorio_list(request):
 
 @api_view(["GET"])
 def laboratorio_detail(request, id):
-
     instance = get_object_or_404(Laboratorio.objects.filter(id=id)) 
     serializer = LaboratorioSerializer(instance=instance, many=False)
 
