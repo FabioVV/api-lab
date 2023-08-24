@@ -15,14 +15,30 @@ from laboratorios.models import Laboratorio
 from laboratorios.serializers import LaboratorioSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework import status
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.pagination import PageNumberPagination
 
 
+## PAGINAÇÃO
+class LaboratorioV2paginacaoCustomizada(PageNumberPagination):
+    page_size = 2
+## PAGINAÇÃO
+
+# CLASS BASED, API V2
+
+class LaboratorioV2viewset(ModelViewSet):
+    queryset = Laboratorio.objects.all()
+    serializer_class = LaboratorioSerializer
+    pagination_class = LaboratorioV2paginacaoCustomizada
+
+
+# FUNCTION BASED, API V1
 
 @api_view(["GET", "POST"])
-def laboratorio_list(request):
+def laboratorio(request):
     if request.method == 'GET':
         instance = Laboratorio.objects.all()
-        serializer = LaboratorioSerializer(instance=instance, many=True) 
+        serializer = LaboratorioSerializer(instance=instance, many=True)
         
         return Response(serializer.data)
     

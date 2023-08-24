@@ -13,8 +13,12 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('laboratorios/api/v2/', views.laboratorio_list, name = 'Laboratorios'),
-    path('laboratorios/api/v2/<int:id>/', views.laboratorio_detail, name = 'Laboratorio'),
+    #FUNCTION BASED
+    path('laboratorios/api/v1/', views.laboratorio, name = 'Laboratorios'),
+    path('laboratorios/api/v1/<int:id>/', views.laboratorio_detail, name = 'Laboratorio'),
 
+    #CLASS BASED
+    path('laboratorios/api/v2/', views.LaboratorioV2viewset.as_view({'get':'list', 'post':'create'}), name = 'Laboratorios'),
+    path('laboratorios/api/v2/<int:id>/', views.LaboratorioV2viewset.as_view({'get':'retrieve', 'patch':'partial_update', 'delete':'destroy', 'put':'update'}), name = 'Laboratorio'),
 ]
 

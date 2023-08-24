@@ -37,7 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    #REST
     'rest_framework',
+
+    #NOSSOS APPS
     'laboratorios',
     'usuarios',
     'reservas',
@@ -149,3 +153,10 @@ MESSAGE_TAGS = {
 
 # USO MEU PROPRIO MODELO DE AUTENTICACAO
 AUTH_USER_MODEL = 'usuarios.Usuario'
+
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 5
+}
