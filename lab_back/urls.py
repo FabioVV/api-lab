@@ -19,12 +19,8 @@ from django.urls import path, include
 
 
 urlpatterns = [
-    path('api-auth/', include('rest_framework.urls', namespace = 'rest_framework')),
+    # path('api-auth/', include('rest_framework.urls', namespace = 'rest_framework')),
     path('', include('laboratorios.urls',)),
-    # path('api-lab/v1/', include('usuarios.urls', namespace = 'usuarios')),
-    # path('api-lab/v1/', include('reservas.urls', namespace = 'reservas')),
-
 
     path('admin/', admin.site.urls),
-
 ]

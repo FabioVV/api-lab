@@ -32,8 +32,8 @@ class LaboratorioV2viewset(ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_object(self):
-        id = self.kwargs.get('id', '')
-        obj = get_object_or_404(self.get_queryset, id=id)
+        pk = self.kwargs.get('pk', '')
+        obj = get_object_or_404(self.get_queryset(), pk=pk)
 
         self.check_object_permissions(self.request, obj)
         return obj
@@ -53,7 +53,7 @@ class LaboratorioV2viewset(ModelViewSet):
     def get_permissions(self):
 
         if self.request.method in ['PATCH', 'DELETE']:
-            return [IsOwner,]
+            return [IsOwner(),]
         return super().get_permissions()
     
     def create(self, request, *args, **kwargs):
@@ -62,6 +62,7 @@ class LaboratorioV2viewset(ModelViewSet):
         serializer.save(user = request.user)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
 
 
 

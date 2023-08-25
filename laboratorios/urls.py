@@ -37,7 +37,7 @@ urlpatterns = [
 
 
     #USING ROUTERS +++++  FORMA MAIS FACIL DE GERAR TODAS AS ROTAS
-    path('laboratorio/api/v3/', include(router.urls)),
+    path('laboratorios/api/v3/', include(router.urls)),
 
     # JWT
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
