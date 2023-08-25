@@ -8,27 +8,26 @@ class UsuarioSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
     password2 = serializers.CharField(write_only=True, required=True)
 
-    user_type = serializers.StringRelatedField(many=False)
+    # user_type = serializers.StringRelatedField(many=False)
 
     class Meta:
         model = Usuario
         fields = [
+            'id',
             'first_name',
             'username',
             'phone',
             'email',
             'cpf_cnpj',
             'user_type',
-            'user_type_id',
             'birth_date',
             'sex',
-            'is_active',
             'password',
             'password2',
         ]
 
         
-        user_type_id = serializers.PrimaryKeyRelatedField(read_only=True)
+        # user_type_id = serializers.PrimaryKeyRelatedField(read_only=True)
 
 
     def validate(self, attrs):
@@ -42,6 +41,7 @@ class UsuarioSerializer(serializers.ModelSerializer):
     
 
     def create(self, validated_data):
+        print(validated_data)
         user = Usuario.objects.create(
             username=validated_data['username'],
             email=validated_data['email'],
@@ -58,6 +58,7 @@ class UsuarioSerializer(serializers.ModelSerializer):
         user.save()
 
         return user
+    
 
 
 class UsuarioTipoSerializer(serializers.ModelSerializer):

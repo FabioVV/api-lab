@@ -12,11 +12,12 @@ class ReservaValidator:
 
 
     def clean(self, *args, **kwargs):
-
+        pass
         # self.clean_name()
 
-        laboratorio = self.data.get('laboratorio')
-        usuario = self.data.get('usuario')
+        # laboratorio = self.data.get('laboratorio')
+        # usuario = self.data.get('usuario')
+
 
     
 

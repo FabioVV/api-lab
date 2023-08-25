@@ -7,9 +7,11 @@ class ReservaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reserva
         fields = [
-            'laboratorio',
-            'usuario',
+            'laboratory',
+            'user',
         ]
+
+        extra_kwargs = {'laboratory': {'required': True}} 
 
     def validate(self, attrs):
 
