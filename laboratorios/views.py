@@ -1,13 +1,7 @@
-# from laboratorios.serializers import LaboratorioSerializer, Laboratorio
-# from rest_framework import viewsets, permissions
 
 
-# # Create your views here.
+# Create your views here.
 
-# class LaboratorioViewSet(viewsets.ModelViewSet):
-#     queryset = Laboratorio.objects.all()
-#     serializer_class = LaboratorioSerializer
-#     permissions_classes = [permissions.IsAuthenticated]
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -17,12 +11,15 @@ from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.pagination import PageNumberPagination
-
+from rest_framework.permissions import IsAuthenticated
 
 ## PAGINAÇÃO
 class LaboratorioV2paginacaoCustomizada(PageNumberPagination):
     page_size = 2
 ## PAGINAÇÃO
+
+
+
 
 # CLASS BASED, API V2
 
@@ -30,6 +27,12 @@ class LaboratorioV2viewset(ModelViewSet):
     queryset = Laboratorio.objects.all()
     serializer_class = LaboratorioSerializer
     pagination_class = LaboratorioV2paginacaoCustomizada
+    permission_classes = [IsAuthenticated]
+
+
+
+
+
 
 
 # FUNCTION BASED, API V1
