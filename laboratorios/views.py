@@ -6,12 +6,14 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from laboratorios.models import Laboratorio
+from laboratorios.permissions import IsOwner
 from laboratorios.serializers import LaboratorioSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+
 
 ## PAGINAÇÃO
 class LaboratorioV2paginacaoCustomizada(PageNumberPagination):
@@ -27,8 +29,39 @@ class LaboratorioV2viewset(ModelViewSet):
     queryset = Laboratorio.objects.all()
     serializer_class = LaboratorioSerializer
     pagination_class = LaboratorioV2paginacaoCustomizada
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
+    def get_object(self):
+        id = self.kwargs.get('id', '')
+        obj = get_object_or_404(self.get_queryset, id=id)
+
+        self.check_object_permissions(self.request, obj)
+        return obj
+    
+    def partial_update(self, request, *args, **kwargs):
+        laboratorio = self.get_object()
+
+        serializer = LaboratorioSerializer(instance=laboratorio,
+                                            data=request.data, 
+                                            many=False,
+                                            partial=True,)
+        serializer.is_valid(raise_exception=True)
+
+        serializer.save()
+        return Response(serializer.data)
+    
+    def get_permissions(self):
+
+        if self.request.method in ['PATCH', 'DELETE']:
+            return [IsOwner,]
+        return super().get_permissions()
+    
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(user = request.user)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
 
