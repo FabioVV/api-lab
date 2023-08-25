@@ -3,7 +3,7 @@
 # Create your views here.
 
 
-from rest_framework.decorators import api_view
+#from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from laboratorios.models import Laboratorio
 from laboratorios.permissions import IsOwner
@@ -12,7 +12,11 @@ from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly #, IsAuthenticated
+# from rest_framework.views import APIView
+# from rest_framework_simplejwt.tokens import BlacklistedToken, OutstandingToken , RefreshToken
+
+
 
 
 ## PAGINAÇÃO
@@ -67,52 +71,46 @@ class LaboratorioV2viewset(ModelViewSet):
 
 
 
+# ######## FUNCTION BASED, API V1
 
-
-
-
-
-
-######## FUNCTION BASED, API V1
-
-@api_view(["GET", "POST"])
-def laboratorio(request):
-    if request.method == 'GET':
-        instance = Laboratorio.objects.all()
-        serializer = LaboratorioSerializer(instance=instance, many=True)
+# @api_view(["GET", "POST"])
+# def laboratorio(request):
+#     if request.method == 'GET':
+#         instance = Laboratorio.objects.all()
+#         serializer = LaboratorioSerializer(instance=instance, many=True)
         
-        return Response(serializer.data)
+#         return Response(serializer.data)
     
-    elif request.method == 'POST':
-        serializer = LaboratorioSerializer(data=request.data)
+#     elif request.method == 'POST':
+#         serializer = LaboratorioSerializer(data=request.data)
         
-        if serializer.is_valid():
-            serializer.save()
+#         if serializer.is_valid():
+#             serializer.save()
 
-            return Response(request.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#             return Response(request.data, status=status.HTTP_201_CREATED)
+#         else:
+#             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 
-@api_view(["GET", "PATCH", "DELETE"])
-def laboratorio_detail(request, id):
-    instance = get_object_or_404(Laboratorio, id=id) 
+# @api_view(["GET", "PATCH", "DELETE"])
+# def laboratorio_detail(request, id):
+#     instance = get_object_or_404(Laboratorio, id=id) 
 
-    if request.method == "GET":
-        serializer = LaboratorioSerializer(instance=instance, many=False)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+#     if request.method == "GET":
+#         serializer = LaboratorioSerializer(instance=instance, many=False)
+#         return Response(serializer.data, status=status.HTTP_200_OK)
     
-    elif request.method == "PATCH":
-        serializer = LaboratorioSerializer(instance=instance, data=request.data, many=False, partial=True)
+#     elif request.method == "PATCH":
+#         serializer = LaboratorioSerializer(instance=instance, data=request.data, many=False, partial=True)
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response(request.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(request.data, status=status.HTTP_201_CREATED)
+#         else:
+#             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
     
-    elif request.method == "DELETE":
-        instance.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+#     elif request.method == "DELETE":
+#         instance.delete()
+#         return Response(status=status.HTTP_204_NO_CONTENT)

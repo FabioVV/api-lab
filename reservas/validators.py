@@ -1,6 +1,7 @@
 from collections import defaultdict
 from django.forms import ValidationError
-
+from laboratorios.models import Laboratorio
+from reservas.models import Reserva
 
 
 class ReservaValidator:
@@ -12,18 +13,22 @@ class ReservaValidator:
 
 
     def clean(self, *args, **kwargs):
-        pass
-        # self.clean_name()
+        
+        self.clean_duplicate_booking()
 
         # laboratorio = self.data.get('laboratorio')
         # usuario = self.data.get('usuario')
+        if self.errors:
+            raise self.ErrorClass(self.errors)
 
 
     
 
-    # def clean_name(self):
+    def clean_duplicate_booking(self):
 
-    #     name = self.data.get('name')
-    #     if len(name) < 5:
-    #         self.errors[name].append('O campo nome precisar ter no minímo 5 caracteres.')
+        laboratory = self.data.get('laboratory')
+        laboratory_duplicate = Reserva.objects.filter(laboratory__in=Laboratorio.objects.filter(id=laboratory.id).all()).all().count()
+        print(laboratory_duplicate)
+        if laboratory_duplicate > 0:
+            self.errors['laboratory'].append('Laboratório já reservado.')
 
