@@ -12,18 +12,20 @@ class UsuarioValidator:
 
 
     def clean(self, *args, **kwargs):
-        pass
-        # self.clean_name()
+        
+         self.clean_password()
 
         # laboratorio = self.data.get('laboratorio')
         # usuario = self.data.get('usuario')
 
     
 
-    # def clean_name(self):
+    def clean_password(self):
 
-    #     name = self.data.get('name')
-    #     if len(name) < 5:
-    #         self.errors[name].append('O campo nome precisar ter no minímo 5 caracteres.')
+        password = self.data.get('password')
+        password2 = self.data.get('password2')
+
+        if password != password2:
+            self.errors[password].append('As duas senhas precisam ser iguais.')
 
     

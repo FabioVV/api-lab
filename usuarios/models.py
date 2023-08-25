@@ -1,6 +1,6 @@
 from django.db import models as db
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
-
+from datetime import date
 
 
 
@@ -45,7 +45,11 @@ class Usuario_tipo(db.Model):
 class Usuario(AbstractBaseUser, PermissionsMixin):
     first_name = db.CharField(max_length=25, blank=True, null=True)
     username = db.CharField(max_length=25, blank=True, null=True)
+    phone = db.CharField(max_length=20, blank=True, null=True)
     email = db.CharField(max_length=45, unique=True)
+    cpf_cnpj = db.CharField(max_length=14, unique=True, blank=False, null=False)
+    birth_date = db.DateField(default=date.today)
+
     
     SEX_CHOICES = (
         ("F", "Feminino"),
@@ -53,20 +57,16 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
         ("N", "Não especificado")
     )
     sex = db.CharField(max_length=1, choices=SEX_CHOICES, blank=False, null=False, default="N")
-    
+
 
     user_type = db.ForeignKey(Usuario_tipo, on_delete=db.SET_NULL, null=True, blank=True, default=None)
-    
-
-
     is_active = db.BooleanField(default=True)
+
+
     is_staff = db.BooleanField(default=False)
     objects = UsuarioManager()
-
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', 'first_name']
 
     def __str__(self):
         return self.first_name
-
-

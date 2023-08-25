@@ -16,8 +16,8 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 
 ## PAGINAÇÃO
-class LaboratorioV2paginacaoCustomizada(PageNumberPagination):
-    page_size = 2
+class LaboratorioV3paginacaoCustomizada(PageNumberPagination):
+    page_size = 3
 ## PAGINAÇÃO
 
 
@@ -28,7 +28,7 @@ class LaboratorioV2paginacaoCustomizada(PageNumberPagination):
 class LaboratorioV2viewset(ModelViewSet):
     queryset = Laboratorio.objects.all()
     serializer_class = LaboratorioSerializer
-    pagination_class = LaboratorioV2paginacaoCustomizada
+    pagination_class = LaboratorioV3paginacaoCustomizada
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_object(self):
@@ -69,7 +69,11 @@ class LaboratorioV2viewset(ModelViewSet):
 
 
 
-# FUNCTION BASED, API V1
+
+
+
+
+######## FUNCTION BASED, API V1
 
 @api_view(["GET", "POST"])
 def laboratorio(request):

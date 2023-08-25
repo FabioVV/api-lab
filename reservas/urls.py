@@ -1,10 +1,12 @@
-from rest_framework.routers import DefaultRouter
 from reservas.views import ReservaViewSet
+from django.urls import path, include
+from rest_framework.routers import SimpleRouter
 
 
-app_name = 'reservas'
+router = SimpleRouter()
+router.register(r'', ReservaViewSet,basename="reservas-api")
 
-router = DefaultRouter(trailing_slash = False)
-router.register(r'reservas', ReservaViewSet)
 
-urlpatterns = router.urls
+urlpatterns = [
+    path('api/v3/reservas/', include(router.urls)),
+]

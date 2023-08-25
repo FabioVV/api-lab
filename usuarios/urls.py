@@ -1,11 +1,17 @@
-from rest_framework.routers import DefaultRouter
 from usuarios.views import UsuarioViewSet, UsuarioTipoViewSet
+from django.urls import path, include
+from rest_framework.routers import SimpleRouter
 
 
-app_name = 'usuarios'
+router = SimpleRouter()
+router.register(r'', UsuarioViewSet, basename='usuarios-api')
 
-router = DefaultRouter(trailing_slash = False)
-router.register(r'usuarios', UsuarioViewSet)
-router.register(r'usuarios_tipo', UsuarioTipoViewSet)
+# FAZER SOMENTE O GET DESSA ROTA
+# router.register(r'', UsuarioTipoViewSet, basename='usuarios-tipo-api')
 
-urlpatterns = router.urls
+
+
+
+urlpatterns = [
+    path('api/v3/usuarios/', include(router.urls)),
+]
