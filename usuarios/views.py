@@ -5,8 +5,8 @@ from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from usuarios.permissions import IsHimself
+from rest_framework.permissions import IsAuthenticatedOrReadOnly,IsAuthenticated
+from usuarios.permissions import IsHimself, IsAut
 
 
 # Create your views here.
@@ -22,12 +22,16 @@ class UsuarioViewSet(viewsets.ModelViewSet):
     queryset = Usuario.objects.all()
     serializer_class = UsuarioSerializer
     pagination_class = UsuarioV3paginacaoCustomizada
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticated,]
+    # authentication_classes = []
 
     def get_permissions(self):
 
         if self.request.method in ['PATCH', 'DELETE']:
             return [IsHimself(),]
+        
+        if self.request.method in ['POST']:
+            return [IsAut(),]
         
         return super().get_permissions()
     
@@ -51,9 +55,22 @@ class UsuarioViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
     
     
-    # def get_queryset(self):
-    #     usuario = Usuario.objects.filter(email = self.request.user.email)
-    #     return usuario
+    def get_queryset(self):
+
+        usuario = Usuario.objects.filter(email = self.request.user.email)
+        return usuario
+    
+    def create(self, request, *args, **kwargs):
+            
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        headers = self.get_success_headers(serializer.data)
+        return Response(
+            serializer.data,
+            status=status.HTTP_201_CREATED,
+            headers=headers
+        )
     
 
 
