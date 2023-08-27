@@ -15,7 +15,7 @@ class IsHimself(permissions.BasePermission):
 
 SAFE_METHODS = ['POST']
 
-class IsAut(permissions.BasePermission):
+class IsAuth(permissions.BasePermission):
     """
     The request is authenticated as a user, or is a read-only request.
     """

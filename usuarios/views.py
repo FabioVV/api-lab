@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticatedOrReadOnly,IsAuthenticated
-from usuarios.permissions import IsHimself, IsAut
+from usuarios.permissions import IsHimself, IsAuth
 
 
 # Create your views here.
@@ -31,7 +31,7 @@ class UsuarioViewSet(viewsets.ModelViewSet):
             return [IsHimself(),]
         
         if self.request.method in ['POST']:
-            return [IsAut(),]
+            return [IsAuth(),]
         
         return super().get_permissions()
     
