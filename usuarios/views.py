@@ -60,17 +60,21 @@ class UsuarioViewSet(viewsets.ModelViewSet):
         usuario = Usuario.objects.filter(email = self.request.user.email)
         return usuario
     
-    def create(self, request, *args, **kwargs):
+    # def create(self, request, *args, **kwargs):
+        
             
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        headers = self.get_success_headers(serializer.data)
-        return Response(
-            serializer.data,
-            status=status.HTTP_201_CREATED,
-            headers=headers
-        )
+    #     serializer = self.get_serializer(data=request.data)
+    #     serializer.is_valid(raise_exception=True)
+    #     if serializer.validated_data['password2']:
+    #         serializer.validated_data.pop('password2')
+            
+    #     serializer.save()
+    #     headers = self.get_success_headers(serializer.data)
+    #     return Response(
+    #         serializer.data,
+    #         status=status.HTTP_201_CREATED,
+    #         headers=headers
+    #     )
     
 
 

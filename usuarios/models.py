@@ -43,7 +43,7 @@ class Usuario_tipo(db.Model):
 
 
 class Usuario(AbstractBaseUser, PermissionsMixin):
-    first_name = db.CharField(max_length=25, blank=True, null=True)
+    first_name = db.CharField(max_length=25, blank=False, null=False)
     username = db.CharField(max_length=25, blank=True, null=True)
     phone = db.CharField(max_length=20, blank=True, null=True)
     email = db.CharField(max_length=45, unique=True)
