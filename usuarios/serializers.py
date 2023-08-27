@@ -42,7 +42,7 @@ class UsuarioSerializer(serializers.ModelSerializer):
     
 
     def create(self, validated_data):
-        print(validated_data)
+        
         user = Usuario.objects.create(
             username=validated_data.get('username', '') ,
             email=validated_data['email'],
