@@ -21,7 +21,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly #, IsAuthentica
 
 ## PAGINAÇÃO
 class LaboratorioV3paginacaoCustomizada(PageNumberPagination):
-    page_size = 3
+    page_size = 10
 ## PAGINAÇÃO
 
 

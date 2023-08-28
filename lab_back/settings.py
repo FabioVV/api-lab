@@ -41,13 +41,18 @@ INSTALLED_APPS = [
 
     #REST
     'rest_framework',
+    'django_rest_passwordreset',
+
+    #email stuff
+    'usuarios.apps.UsersConfig',
+
     #AUTENTICACAO JWT
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
 
     #NOSSOS APPS
     'laboratorios',
-    'usuarios',
+    #'usuarios',
     'reservas',
 ]
 
@@ -201,3 +206,42 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainSlidingSerializer",
     "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
 }
+
+
+
+
+
+
+# EMAIL RESET STUFF AND CONFIG
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # Replace with your preferred backend
+
+
+EMAIL_PORT = 587  # Replace with your email port
+EMAIL_USE_TLS = True  # Set to False if your email server doesn't use TLS
+EMAIL_HOST = 'smtp.gmail.com'  # Replace with your email host for gmail -> 'smtp.gmail.com'
+EMAIL_HOST_USER = 'restsistema@gmail.com'  # Replace with your email username
+EMAIL_HOST_PASSWORD = 'jviriijzxtcqbjjl'  # Replace with your email password
+
+
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [BASE_DIR, 'templates/',],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+
+
+
+## NAO APAGAR, MUITO IMPORTANTE!!!!!
+# SENHA API PROJECT = jviriijzxtcqbjjl 

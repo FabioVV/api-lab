@@ -46,7 +46,7 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     first_name = db.CharField(max_length=25, blank=False, null=False)
     username = db.CharField(max_length=25, blank=True, null=True)
     phone = db.CharField(max_length=20, blank=True, null=True)
-    email = db.CharField(max_length=45, unique=True)
+    email = db.EmailField(max_length=45, unique=True)
     cpf_cnpj = db.CharField(max_length=14, unique=True, blank=False, null=False)
     birth_date = db.DateField(default=date.today)
 

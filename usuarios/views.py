@@ -1,9 +1,10 @@
-from usuarios.serializers import UsuarioSerializer, Usuario, Usuario_tipo, UsuarioTipoSerializer
+from usuarios.serializers import UsuarioSerializer, ChangePasswordSerilizer, Usuario, Usuario_tipo, UsuarioTipoSerializer
 from rest_framework import viewsets, permissions
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework import status
+from django.contrib.auth import update_session_auth_hash
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticatedOrReadOnly,IsAuthenticated
 from usuarios.permissions import IsHimself, IsAuth
@@ -75,6 +76,7 @@ class UsuarioViewSet(viewsets.ModelViewSet):
     #         status=status.HTTP_201_CREATED,
     #         headers=headers
     #     )
+
     
 
 
@@ -86,3 +88,24 @@ class UsuarioTipoViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     http_method_names = ['get']
+
+
+
+
+## PASSWORD RESET ROUTE BELOW (USER)
+
+
+
+@permission_classes([IsAuthenticated])
+@api_view(['POST'])
+def change_password(request):
+    if request.method == 'POST':
+        serializer = ChangePasswordSerilizer(data = request.data)
+        if serializer.is_valid():
+            if request.user.check_password(serializer.data.get['old_password']):
+                request.user.set_password(serializer.data.get['old_password'])
+                request.user.save()
+                update_session_auth_hash(request, request.user)  # To update session after password change
+                return Response({'message': 'Password changed successfully.'}, status=status.HTTP_200_OK)
+            return Response({'error': 'Incorrect old password.'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
