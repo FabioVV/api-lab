@@ -15,7 +15,7 @@ from usuarios.permissions import IsHimself, IsAuth
 
 ## PAGINAÇÃO
 class UsuarioV3paginacaoCustomizada(PageNumberPagination):
-    page_size = 3
+    page_size = 10
 ## PAGINAÇÃO
 
 

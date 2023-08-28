@@ -30,5 +30,5 @@ class ReservaValidator:
         laboratory_duplicate = Reserva.objects.filter(laboratory__in=Laboratorio.objects.filter(id=laboratory.id).all()).all().count()
         
         if laboratory_duplicate > 0:
-            self.errors['laboratory'].append('Laboratório já reservado.')
+            self.errors['laboratory'].append('Laboratory in use.')
 
