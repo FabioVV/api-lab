@@ -36,12 +36,14 @@ class UsuarioViewSet(viewsets.ModelViewSet):
         
         return super().get_permissions()
     
+
     def get_object(self):
         pk = self.kwargs.get('pk', '')
         obj = get_object_or_404(self.get_queryset(), pk=pk)
 
         self.check_object_permissions(self.request, obj)
         return obj
+    
     
     def partial_update(self, request, *args, **kwargs):
         usuario = self.get_object()
@@ -92,7 +94,7 @@ class UsuarioTipoViewSet(viewsets.ModelViewSet):
 
 
 
-## PASSWORD RESET ROUTE BELOW (USER)
+## PASSWORD CHANGE FOR LOGGED IN USER (USER)
 
 
 
@@ -109,6 +111,5 @@ def change_password(request):
                 return Response({'message': 'Password changed successfully.'}, status=status.HTTP_200_OK)
             return Response({'error': 'Incorrect old password.'}, status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 
