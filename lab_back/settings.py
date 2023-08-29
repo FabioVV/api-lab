@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     #REST
     'rest_framework',
     'django_rest_passwordreset',
+    'corsheaders',
 
     #email stuff
     'usuarios.apps.UsersConfig',
@@ -64,6 +65,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'lab_back.urls'
@@ -146,17 +148,6 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-
-
-# para o FUTURO
-MESSAGE_TAGS = {
-#     constants.DEBUG:'message-debug alert-dismissible',
-#     constants.ERROR:'message-error alert-dismissible',
-#     constants.INFO:'message-info alert-dismissible',
-#     constants.SUCCESS:'message-success alert-dismissible',
-#     constants.WARNING:'message-warning alert-dismissible',
- }
 
 
 
@@ -245,3 +236,8 @@ TEMPLATES = [
 
 ## NAO APAGAR, MUITO IMPORTANTE!!!!!
 # SENHA API PROJECT = jviriijzxtcqbjjl 
+
+
+# PARA PODER FAZER REQUISIÇÕES DE QUALQUER LUGAR 
+ALLOWED_HOSTS=['*']
+CORS_ORIGIN_ALLOW_ALL = True
