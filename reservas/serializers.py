@@ -7,6 +7,7 @@ class ReservaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reserva
         fields = [
+            'id',
             'laboratory',
             'user',
         ]
