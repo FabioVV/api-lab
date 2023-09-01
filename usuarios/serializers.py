@@ -26,6 +26,7 @@ class UsuarioSerializer(serializers.ModelSerializer):
             'sex',
             'password',
             'password_confirmation',
+            'is_active',
         ]
 
         
@@ -42,9 +43,18 @@ class UsuarioSerializer(serializers.ModelSerializer):
     
 
     def create(self, validated_data):
-        
+
+
+
+        is_active = validated_data.get('is_active', '')
+
+        if is_active is '':
+            is_active = True
+        else:
+            is_active = True if validated_data['is_active'] is 1 else False
+
         user = Usuario.objects.create(
-            username=validated_data.get('username', '') ,
+            username=validated_data.get('username', ''),
             email=validated_data['email'],
             birth_date=validated_data.get('birth_date', datetime.today().strftime('%Y-%m-%d')) ,
             sex=validated_data.get('sex', 'N'),
@@ -52,6 +62,7 @@ class UsuarioSerializer(serializers.ModelSerializer):
             first_name=validated_data['first_name'],
             cpf_cnpj=validated_data['cpf_cnpj'],
             user_type=validated_data['user_type'],
+            is_active = is_active,
         )
 
         

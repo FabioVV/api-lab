@@ -8,7 +8,7 @@ from django.contrib.auth import update_session_auth_hash
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticatedOrReadOnly,IsAuthenticated
 from usuarios.permissions import IsHimself, IsAuth
-
+from django.db.models import Q
 
 # Create your views here.
 
@@ -60,7 +60,7 @@ class UsuarioViewSet(viewsets.ModelViewSet):
     
     def get_queryset(self):
 
-        usuario = Usuario.objects.filter(email = self.request.user.email)
+        usuario = Usuario.objects.filter(Q(email = self.request.user.email) & Q(is_active = True))
         return usuario
     
     # def create(self, request, *args, **kwargs):
@@ -78,6 +78,15 @@ class UsuarioViewSet(viewsets.ModelViewSet):
     #         status=status.HTTP_201_CREATED,
     #         headers=headers
     #     )
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+    
+    def perform_destroy(self, instance):
+        instance.is_active = False
+        instance.save()
 
     
 
