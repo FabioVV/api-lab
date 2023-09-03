@@ -9,7 +9,7 @@ class UsuarioSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
     password_confirmation = serializers.CharField(write_only=True, required=True)
 
-    # user_type = serializers.StringRelatedField(many=False)
+    #user_type = serializers.StringRelatedField(many=False)
     
 
     class Meta:

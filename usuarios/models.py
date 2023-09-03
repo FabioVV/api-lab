@@ -49,7 +49,8 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     email = db.EmailField(max_length=45, unique=True)
     cpf_cnpj = db.CharField(max_length=14, unique=True, blank=False, null=False)
     birth_date = db.DateField(default=date.today)
-
+    created_at = db.DateTimeField(auto_now_add=True)
+    updated_at = db.DateTimeField(auto_now=True)
     
     SEX_CHOICES = (
         ("F", "Feminino"),

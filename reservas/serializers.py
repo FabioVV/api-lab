@@ -7,8 +7,10 @@ class ReservaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reserva
         fields = [
+            'id',
             'laboratory',
             'user',
+            'booked_at',
         ]
 
         extra_kwargs = {'laboratory': {'required': True}} 
