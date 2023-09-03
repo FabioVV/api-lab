@@ -1,4 +1,4 @@
-from reservas.permissions import IsPoweUser
+from reservas.permissions import IsPowerUser
 from reservas.serializers import ReservaSerializer, Reserva
 from rest_framework import viewsets, permissions
 from rest_framework.decorators import api_view
@@ -28,7 +28,7 @@ class ReservaViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
 
         if self.request.method in ['PATCH', 'DELETE']:
-            return [IsPoweUser(),]
+            return [IsPowerUser(),]
         
         return super().get_permissions()
     
@@ -57,4 +57,6 @@ class ReservaViewSet(viewsets.ModelViewSet):
         serializer.save(user = request.user)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+    
+
     
