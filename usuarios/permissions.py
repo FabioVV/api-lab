@@ -17,7 +17,7 @@ SAFE_METHODS = ['POST']
 
 class IsAuth(permissions.BasePermission):
     """
-    The request is authenticated as a user, or is a read-only request.
+    Checks to see if the request is a POST or if it wasnt you making the request.
     """
 
     def has_permission(self, request, view):

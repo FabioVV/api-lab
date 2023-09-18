@@ -48,10 +48,10 @@ class UsuarioSerializer(serializers.ModelSerializer):
 
         is_active = validated_data.get('is_active', '')
 
-        if is_active is '':
+        if is_active == '':
             is_active = True
         else:
-            is_active = True if validated_data['is_active'] is 1 else False
+            is_active = True if validated_data['is_active'] == 1 else False
 
         user = Usuario.objects.create(
             username=validated_data.get('username', ''),
