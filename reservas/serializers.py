@@ -4,6 +4,7 @@ from reservas.validators import ReservaValidator
 
 
 class ReservaSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Reserva
         fields = [
@@ -11,9 +12,10 @@ class ReservaSerializer(serializers.ModelSerializer):
             'laboratory',
             'user',
             'booked_at',
+            'bol_number',
         ]
 
-        extra_kwargs = {'laboratory': {'required': True}} 
+        extra_kwargs = {'laboratory': {'required': True}, 'bol_number': {'required': True}} 
 
     def validate(self, attrs):
 

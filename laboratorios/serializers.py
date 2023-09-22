@@ -10,6 +10,7 @@ class LaboratorioSerializer(serializers.ModelSerializer):
             'id',
             'name',
             'about',
+            'is_active',
         ]
 
     #sobre_lab = serializers.CharField(max_length=30, source='about')

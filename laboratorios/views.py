@@ -7,7 +7,7 @@
 from rest_framework.response import Response
 from laboratorios.models import Laboratorio
 from reservas.models import Reserva
-
+from django.db.models import Q
 from laboratorios.permissions import IsOwner
 from laboratorios.serializers import LaboratorioSerializer
 from django.shortcuts import get_object_or_404
@@ -36,6 +36,11 @@ class LaboratorioV2viewset(ModelViewSet):
     serializer_class = LaboratorioSerializer
     pagination_class = LaboratorioV3paginacaoCustomizada
     permission_classes = [IsAuthenticatedOrReadOnly]
+
+        
+    def get_queryset(self):
+        labs = Laboratorio.objects.filter(Q(user = self.request.user) & Q(is_active = True))
+        return labs
 
     def get_object(self):
         pk = self.kwargs.get('pk', '')
@@ -73,19 +78,22 @@ class LaboratorioV2viewset(ModelViewSet):
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         destroy_instance = self.perform_destroy(instance)
+
         if destroy_instance == None:
             return Response(status=status.HTTP_204_NO_CONTENT)
         elif destroy_instance == False:
             return Response(status=status.HTTP_403_FORBIDDEN,data={'message':'Laboratory in use.'})
-
-
 
     
     
     def perform_destroy(self, instance):
         query = Reserva.objects.filter(laboratory__in = Laboratorio.objects.filter(id=instance.id)).all().count()
         if query == 0:
-            instance.delete()
+
+            lab = Laboratorio.objects.get(id=instance.id)
+            lab.is_active = False
+            lab.save()
+
         else:
             return False
 

@@ -8,13 +8,13 @@ from rest_framework import status
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from usuarios.permissions import IsHimself
-
+import requests as r
 
 # Create your views here.
 
 ## PAGINAÇÃO
 class ReservaV3paginacaoCustomizada(PageNumberPagination):
-    page_size = 3
+    page_size = 10
 ## PAGINAÇÃO
 
 
@@ -51,12 +51,42 @@ class ReservaViewSet(viewsets.ModelViewSet):
         serializer.save()
         return Response(serializer.data)
     
+
+
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save(user = request.user)
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+        headers = self.get_success_headers(serializer.validated_data)
+
+        boleto_number = serializer.validated_data.get('bol_number')
+        url = "https://api-go-wash-efc9c9582687.herokuapp.com/api/pay-boleto"
+        data = {'boleto': boleto_number, 'user_id': self.request.user.id, }
+
+        request = r.post(url, data=data, headers={ 'Authorization': 'Vf9WSyYqnwxXODjiExToZCT9ByWb3FVsjr' })
+
+
+        if request.status_code == 200:
+            request = request.json()
+            serializer.save(user = self.request.user)
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST, data={'error':'The payment failed. Please, try again later.'})
+
+
+        # serializer.is_valid(raise_exception=True)
+        # serializer.save(user = request.user)
+        # return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+
+    
+    # def create(self, request, *args, **kwargs):
+    #     serializer = self.get_serializer(data=request.data)
+    #     serializer.is_valid(raise_exception=True)
+    #     serializer.save(user = request.user)
+    #     headers = self.get_success_headers(serializer.data)
+    #     return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
     
 
     

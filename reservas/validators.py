@@ -15,7 +15,8 @@ class ReservaValidator:
     def clean(self, *args, **kwargs):
         
         self.clean_duplicate_booking()
-
+        self.check_boleto_number()
+        
         # laboratorio = self.data.get('laboratorio')
         # usuario = self.data.get('usuario')
         if self.errors:
@@ -31,4 +32,12 @@ class ReservaValidator:
         
         if laboratory_duplicate > 0:
             self.errors['laboratory'].append('Laboratory in use.')
+
+
+    def check_boleto_number(self):
+
+        boleto = self.data.get('bol_number')
+
+        if boleto is None or boleto is "":
+            self.errors['bol_number'].append('Could not confirm the boleto number')
 
