@@ -16,14 +16,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-
-
+from usuarios.views import UsuarioLogin, UsuarioLogout, UsuarioRegistro
 urlpatterns = [
     # path('api-auth/', include('rest_framework.urls', namespace = 'rest_framework')),
+    # path('api/v3/register/', UsuarioRegistro.as_view(), name='register'),
+    path('api/v3/login/', UsuarioLogin.as_view(), name='login'),
+    path('api/v3/logout/', UsuarioLogout.as_view(), name='logout'),
+
+
     path('', include('usuarios.urls',)),
     path('api/v3/password_reset/', include('django_rest_passwordreset.urls', namespace='password_reset')),
     path('', include('laboratorios.urls',)),
     path('', include('reservas.urls',)),
-
     path('admin/', admin.site.urls),
 ]

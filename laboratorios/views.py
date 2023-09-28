@@ -14,10 +14,9 @@ from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import IsAuthenticatedOrReadOnly #, IsAuthenticated
+from rest_framework.permissions import IsAuthenticated
+from globals import permission_check
 # from rest_framework.views import APIView
-# from rest_framework_simplejwt.tokens import BlacklistedToken, OutstandingToken , RefreshToken
-
 
 
 
@@ -35,14 +34,16 @@ class LaboratorioV2viewset(ModelViewSet):
     queryset = Laboratorio.objects.all()
     serializer_class = LaboratorioSerializer
     pagination_class = LaboratorioV3paginacaoCustomizada
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticated,]
 
         
     def get_queryset(self):
+        
         labs = Laboratorio.objects.filter(Q(user = self.request.user) & Q(is_active = True))
         return labs
 
     def get_object(self):
+
         pk = self.kwargs.get('pk', '')
         obj = get_object_or_404(self.get_queryset(), pk=pk)
 
@@ -63,10 +64,13 @@ class LaboratorioV2viewset(ModelViewSet):
     
     def get_permissions(self):
 
-        if self.request.method in ['PATCH', 'DELETE']:
+
+        if self.request.method in ['PATCH', 'DELETE'] and not self.request.user.is_anonymous:
             return [IsOwner(),]
+        
         return super().get_permissions()
     
+
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)

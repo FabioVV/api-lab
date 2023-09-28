@@ -16,5 +16,4 @@ router.register(r'', UsuarioTipoViewSet, basename='users-type-api')
 urlpatterns = [
     path('api/v3/usuarios/', include(router.urls)),
     path('api/v3/change_password/', change_password, name='change_password'),
-
 ]

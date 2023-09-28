@@ -1,5 +1,6 @@
 from collections import defaultdict
 from django.forms import ValidationError
+from django.contrib.auth import authenticate
 
 
 
@@ -13,7 +14,7 @@ class UsuarioValidator:
 
     def clean(self, *args, **kwargs):
         
-         self.clean_password()
+        self.clean_password()
 
         # laboratorio = self.data.get('laboratorio')
         # usuario = self.data.get('usuario')
@@ -27,5 +28,6 @@ class UsuarioValidator:
 
         if password != password2:
             self.errors[password].append('As duas senhas precisam ser iguais.')
-
     
+
+

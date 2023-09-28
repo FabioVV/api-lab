@@ -44,8 +44,6 @@ class UsuarioSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
 
-
-
         is_active = validated_data.get('is_active', '')
 
         if is_active == '':
@@ -80,6 +78,34 @@ class UsuarioTipoSerializer(serializers.ModelSerializer):
         fields = [
             'type_name',
         ]
+
+
+
+
+# class UsuarioRegistroSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Usuario
+#         fields = [
+#             'first_name',
+#             'username', 
+#             'phone',
+#             'email',
+#             'cpf_cnpj',
+#             'user_type',
+#             'birth_date',
+#             'sex',
+#             'password',
+#             'password_confirmation',
+#         ]
+
+#     def create(self, clean_data):
+#         usuario_obj = Usuario.objects.create
+
+class UsuarioLoginSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField()
+
+
 
 
 class ChangePasswordSerilizer(serializers.Serializer):

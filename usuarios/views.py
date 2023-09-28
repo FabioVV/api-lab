@@ -1,14 +1,18 @@
-from usuarios.serializers import UsuarioSerializer, ChangePasswordSerilizer, Usuario, Usuario_tipo, UsuarioTipoSerializer
+from usuarios.serializers import UsuarioSerializer, ChangePasswordSerilizer, Usuario, Usuario_tipo, UsuarioTipoSerializer, UsuarioLoginSerializer
 from rest_framework import viewsets, permissions
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
+from rest_framework.views import APIView
+from django.contrib.auth import login, logout
+from django.contrib.auth import authenticate
+from rest_framework.authentication import SessionAuthentication
 from django.shortcuts import get_object_or_404
-from rest_framework import status
 from django.contrib.auth import update_session_auth_hash
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import IsAuthenticatedOrReadOnly,IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from usuarios.permissions import IsHimself, IsAuth
 from django.db.models import Q
+from rest_framework import status
 
 # Create your views here.
 
@@ -28,7 +32,7 @@ class UsuarioViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
 
-        if self.request.method in ['PATCH', 'DELETE']:
+        if self.request.method in ['PATCH', 'DELETE'] and not self.request.user.is_anonymous:
             return [IsHimself(),]
         
         if self.request.method in ['POST']:
@@ -96,7 +100,7 @@ class UsuarioTipoViewSet(viewsets.ModelViewSet):
     queryset = Usuario_tipo.objects.all()
     serializer_class = UsuarioTipoSerializer
     pagination_class = UsuarioV3paginacaoCustomizada
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticated]
 
     http_method_names = ['get']
 
@@ -122,3 +126,45 @@ def change_password(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+
+
+### REGISTER AND LOGIN AND LOGOUT
+
+class UsuarioRegistro(APIView):
+    permission_classes = [permissions.AllowAny,]
+
+    def post(self, request):
+        serializer = UsuarioSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            user = serializer.create(request.data)
+            if user:
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+ 
+class UsuarioLogin(APIView):
+    permission_classes = [permissions.AllowAny,]
+    authentication_classes = [SessionAuthentication,]
+
+    def post(self, request):
+        data = request.data
+        serializer = UsuarioLoginSerializer(data=data)
+        if serializer.is_valid(raise_exception=True):
+            user = authenticate(email = request.data['email'], password = request.data['password'])
+            if user:
+                login(request, user)
+                user = Usuario.objects.get(email = serializer.data['email'])
+                user = UsuarioSerializer(user)
+                return Response(user.data, status=status.HTTP_200_OK)
+            else:
+                return Response({'detail': 'Usuário não encontrado. Por favor, revise seu email e senha.'}, status=status.HTTP_401_UNAUTHORIZED)
+
+
+
+
+class UsuarioLogout(APIView):
+    permission_classes = [permissions.IsAuthenticated,]
+
+    def post(self, request):
+        logout(request)
+        return Response(status=status.HTTP_200_OK)
