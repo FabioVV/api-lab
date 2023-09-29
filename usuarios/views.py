@@ -28,7 +28,6 @@ class UsuarioViewSet(viewsets.ModelViewSet):
     serializer_class = UsuarioSerializer
     pagination_class = UsuarioV3paginacaoCustomizada
     permission_classes = [IsAuthenticated,]
-    # authentication_classes = []
 
     def get_permissions(self):
 
@@ -82,6 +81,7 @@ class UsuarioViewSet(viewsets.ModelViewSet):
     #         status=status.HTTP_201_CREATED,
     #         headers=headers
     #     )
+
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         self.perform_destroy(instance)
@@ -143,8 +143,6 @@ class UsuarioRegistro(APIView):
 
  
 class UsuarioLogin(APIView):
-    permission_classes = [permissions.AllowAny,]
-    authentication_classes = [SessionAuthentication,]
 
     def post(self, request):
         data = request.data

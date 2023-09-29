@@ -45,6 +45,15 @@ class UsuarioSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
 
         is_active = validated_data.get('is_active', '')
+        user_type = validated_data.get('user_type', '')
+
+        user_type_real = ''
+
+        if user_type == '':
+            user_type_real = Usuario_tipo.objects.get(id = 1)
+        else:
+            user_type_real = Usuario_tipo.objects.get(id = user_type)
+
 
         if is_active == '':
             is_active = True
@@ -59,7 +68,7 @@ class UsuarioSerializer(serializers.ModelSerializer):
             phone=validated_data.get('phone', '000000000'),
             first_name=validated_data['first_name'],
             cpf_cnpj=validated_data['cpf_cnpj'],
-            user_type=validated_data['user_type'],
+            user_type=user_type_real,
             is_active = is_active,
         )
 
