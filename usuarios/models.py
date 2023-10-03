@@ -61,7 +61,7 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     sex = db.CharField(max_length=1, choices=SEX_CHOICES, blank=False, null=False, default="N")
 
 
-    user_type = db.ForeignKey(Usuario_tipo, on_delete=db.SET_NULL, null=True, blank=True, default=None)
+    user_type = db.ForeignKey(Usuario_tipo, on_delete=db.SET_NULL, null=True, blank=False)
     is_active = db.BooleanField(default=True)
 
 

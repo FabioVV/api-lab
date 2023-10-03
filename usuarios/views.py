@@ -101,7 +101,6 @@ class UsuarioTipoViewSet(viewsets.ModelViewSet):
     serializer_class = UsuarioTipoSerializer
     pagination_class = UsuarioV3paginacaoCustomizada
     permission_classes = [IsAuthenticated]
-
     http_method_names = ['get']
 
 
@@ -168,3 +167,4 @@ class UsuarioLogout(APIView):
     def post(self, request):
         logout(request)
         return Response(status=status.HTTP_200_OK)
+

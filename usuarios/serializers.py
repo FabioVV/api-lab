@@ -6,8 +6,8 @@ from datetime import datetime
 
 class UsuarioSerializer(serializers.ModelSerializer):
 
-    password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
-    password_confirmation = serializers.CharField(write_only=True, required=True)
+    password = serializers.CharField(write_only=True, validators=[validate_password])
+    password_confirmation = serializers.CharField(write_only=True,)
 
     #user_type = serializers.StringRelatedField(many=False)
     
@@ -28,6 +28,7 @@ class UsuarioSerializer(serializers.ModelSerializer):
             'password_confirmation',
             'is_active',
         ]
+        extra_kwargs = {'user_type': {'required': True}, 'password': {'required': True}, 'password_confirmation': {'required': True}, 'birth_date': {'required': True}} 
 
         
         # user_type_id = serializers.PrimaryKeyRelatedField(read_only=True)
@@ -45,14 +46,6 @@ class UsuarioSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
 
         is_active = validated_data.get('is_active', '')
-        user_type = validated_data.get('user_type', '')
-
-        user_type_real = ''
-
-        if user_type == '':
-            user_type_real = Usuario_tipo.objects.get(id = 1)
-        else:
-            user_type_real = Usuario_tipo.objects.get(id = user_type)
 
 
         if is_active == '':
@@ -68,7 +61,7 @@ class UsuarioSerializer(serializers.ModelSerializer):
             phone=validated_data.get('phone', '000000000'),
             first_name=validated_data['first_name'],
             cpf_cnpj=validated_data['cpf_cnpj'],
-            user_type=user_type_real,
+            user_type=validated_data['user_type'],
             is_active = is_active,
         )
 
@@ -115,8 +108,6 @@ class UsuarioLoginSerializer(serializers.Serializer):
     password = serializers.CharField()
 
 
-
-
 class ChangePasswordSerilizer(serializers.Serializer):
     old_password = serializers.CharField(required=True)
     new_password = serializers.CharField(required=True)
@@ -124,3 +115,4 @@ class ChangePasswordSerilizer(serializers.Serializer):
 
 class ResetPasswordEmailSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
+    

@@ -7,6 +7,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
+from usuarios.models import Usuario_tipo
 from usuarios.permissions import IsHimself
 import requests as r
 
@@ -54,39 +55,30 @@ class ReservaViewSet(viewsets.ModelViewSet):
 
 
     def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
 
-        headers = self.get_success_headers(serializer.validated_data)
+        if self.request.user.user_type == Usuario_tipo.objects.get(id = 2):
 
-        boleto_number = serializer.validated_data.get('bol_number')
-        url = "https://api-go-wash-efc9c9582687.herokuapp.com/api/pay-boleto"
-        data = {'boleto': boleto_number, 'user_id': self.request.user.id, }
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
 
-        request = r.post(url, data=data, headers={ 'Authorization': 'Vf9WSyYqnwxXODjiExToZCT9ByWb3FVsjr' })
+            headers = self.get_success_headers(serializer.validated_data)
+
+            boleto_number = serializer.validated_data.get('bol_number')
+            url = "https://api-go-wash-efc9c9582687.herokuapp.com/api/pay-boleto"
+            data = {'boleto': boleto_number, 'user_id': self.request.user.id, }
+
+            request = r.post(url, data=data, headers={ 'Authorization': 'Vf9WSyYqnwxXODjiExToZCT9ByWb3FVsjr' })
 
 
-        if request.status_code == 200:
-            request = request.json()
-            serializer.save(user = self.request.user)
+            if request.status_code == 200:
+                request = request.json()
+                serializer.save(user = self.request.user)
 
-            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+                return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+            else:
+                return Response(status=status.HTTP_400_BAD_REQUEST, data={'error':'The payment failed. Please, try again later.'})
         else:
-            return Response(status=status.HTTP_400_BAD_REQUEST, data={'error':'The payment failed. Please, try again later.'})
+            return Response(status=status.HTTP_400_BAD_REQUEST, data={'error':'Only teachers can make bookings.'})
 
 
-        # serializer.is_valid(raise_exception=True)
-        # serializer.save(user = request.user)
-        # return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
-
-    
-    # def create(self, request, *args, **kwargs):
-    #     serializer = self.get_serializer(data=request.data)
-    #     serializer.is_valid(raise_exception=True)
-    #     serializer.save(user = request.user)
-    #     headers = self.get_success_headers(serializer.data)
-    #     return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-    
-
-    
