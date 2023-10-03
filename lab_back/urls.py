@@ -19,10 +19,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from usuarios.views import UsuarioLogin, UsuarioLogout, UsuarioRegistro
+from rest_framework_simplejwt import views as jwt_views
 
 urlpatterns = [
-    # path('api-auth/', include('rest_framework.urls', namespace = 'rest_framework')),
-    # path('api/v3/register/', UsuarioRegistro.as_view(), name='register'),
+
+    
+    path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
+
+
     path('api/v3/login/', UsuarioLogin.as_view(), name='login'),
     path('api/v3/logout/', UsuarioLogout.as_view(), name='logout'),
 
