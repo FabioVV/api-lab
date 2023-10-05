@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from laboratorios.models import Laboratorio
 from reservas.models import Reserva
 from django.db.models import Q
-from laboratorios.permissions import IsOwner
+from laboratorios.permissions import IsOwner, IsTeacherOrSuperUser
 from laboratorios.serializers import LaboratorioSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework import status
@@ -65,9 +65,11 @@ class LaboratorioV2viewset(ModelViewSet):
     
     def get_permissions(self):
 
-
         if self.request.method in ['PATCH', 'DELETE'] and not self.request.user.is_anonymous:
             return [IsOwner(),]
+        
+        elif self.request.method == 'POST' and not self.request.user.is_anonymous:
+            return [IsTeacherOrSuperUser(),]
         
         return super().get_permissions()
     

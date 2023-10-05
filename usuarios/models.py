@@ -63,9 +63,8 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
 
     user_type = db.ForeignKey(Usuario_tipo, on_delete=db.SET_NULL, null=True, blank=False)
     is_active = db.BooleanField(default=True)
-
-
     is_staff = db.BooleanField(default=False)
+
     objects = UsuarioManager()
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', 'first_name']
