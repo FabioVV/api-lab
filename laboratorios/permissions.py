@@ -18,14 +18,16 @@ class IsOwner(permissions.BasePermission):
 
 class IsTeacherOrSuperUser(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
-        #tipo_user = Usuario_tipo.objects.get(id = request.user.user_type)
         pass
          
     
     def has_permission(self, request, view):
-        if(request.user.user_type == 2):
+
+        tipo_user = Usuario_tipo.objects.get(id = 2)
+
+        if(request.user.user_type == tipo_user):
             return True
-        elif(request.user.is_superuser ):
+        elif(not request.user.is_superuser):
             return True
         else:
             return False
