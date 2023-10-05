@@ -1,0 +1,16 @@
+
+
+# DJANGO SECRET KEY
+SECRET_KEY = "insecure, generate a new one"
+
+
+Use this code below to generate a secure secret key. 
+Open your terminal and enter django shell using: python manage.py shell
+And then copy and paste this code, run, then copy and paste the string generated into the secret_key constant above.
+
+python -c "import string as s; from random import SystemRandom as sr; print(''.join(sr().choices(s.ascii_letters + s.punctuation, k=64)))"
+
+
+
+# 0 = false, 1 = true
+DEBUG = 1
