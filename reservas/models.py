@@ -11,3 +11,4 @@ class Reserva(db.Model):
     
     booked_at = db.DateTimeField(auto_now_add=True)
     updated_at = db.DateTimeField(auto_now=True)
+    is_active = db.BooleanField(default=True)

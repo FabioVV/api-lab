@@ -20,7 +20,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='usuario',
             name='cpf_cnpj',
-            field=models.CharField(default="", max_length=14, unique=True),
+            field=models.CharField(default=django.utils.timezone.now, max_length=14, unique=True),
             preserve_default=False,
         ),
         migrations.AddField(

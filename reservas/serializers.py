@@ -13,6 +13,7 @@ class ReservaSerializer(serializers.ModelSerializer):
             'user',
             'booked_at',
             'bol_number',
+            'is_active',
         ]
 
         extra_kwargs = {'laboratory': {'required': True}, 'bol_number': {'required': True}} 

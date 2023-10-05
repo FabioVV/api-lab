@@ -11,6 +11,7 @@ class LaboratorioSerializer(serializers.ModelSerializer):
             'name',
             'about',
             'is_active',
+            'capacity',
         ]
 
     #sobre_lab = serializers.CharField(max_length=30, source='about')

@@ -81,4 +81,25 @@ class ReservaViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_400_BAD_REQUEST, data={'error':'Only teachers can make bookings.'})
 
 
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        destroy_instance = self.perform_destroy(instance)
 
+        if destroy_instance == None:
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        elif destroy_instance == False:
+            return Response(status=status.HTTP_403_FORBIDDEN,data={'error':'Cannot deactivate booking. Is it your booking?'})
+
+    
+    def perform_destroy(self, instance):
+        reserva = Reserva.objects.get(id=instance.id)
+
+        if self.request.user == reserva.user:
+
+            reserva.is_active = False
+            reserva.save()
+
+        else :
+            return False
+
+    
