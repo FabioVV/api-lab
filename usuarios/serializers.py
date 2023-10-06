@@ -27,6 +27,9 @@ class UsuarioSerializer(serializers.ModelSerializer):
             'password',
             'password_confirmation',
             'is_active',
+            'last_name',
+            'is_superuser',
+            'is_staff'
         ]
         extra_kwargs = {'user_type': {'required': True}, 'password': {'required': True}, 'password_confirmation': {'required': True}, 'birth_date': {'required': True}} 
 

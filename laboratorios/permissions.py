@@ -27,7 +27,7 @@ class IsTeacherOrSuperUser(permissions.BasePermission):
 
         if(request.user.user_type == tipo_user):
             return True
-        elif(not request.user.is_superuser):
+        elif(request.user.is_superuser):
             return True
         else:
             return False

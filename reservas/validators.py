@@ -38,6 +38,6 @@ class ReservaValidator:
 
         boleto = self.data.get('bol_number')
 
-        if boleto is None or boleto is "":
+        if boleto is None or boleto == "":
             self.errors['bol_number'].append('Could not confirm the boleto number')
 

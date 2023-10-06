@@ -1,14 +1,12 @@
-from reservas.permissions import IsPowerUser
+from reservas.permissions import IsPowerUser, IsteacherOrAdmin
 from reservas.serializers import ReservaSerializer, Reserva
-from rest_framework import viewsets, permissions
-from rest_framework.decorators import api_view
+from rest_framework import viewsets
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from usuarios.models import Usuario_tipo
-from usuarios.permissions import IsHimself
 import requests as r
 
 # Create your views here.
@@ -31,6 +29,10 @@ class ReservaViewSet(viewsets.ModelViewSet):
         if self.request.method in ['PATCH', 'DELETE'] and not self.request.user.is_anonymous:
             return [IsPowerUser(),]
         
+        if self.request.method in ['POST'] and not self.request.user.is_anonymous:
+            return [IsteacherOrAdmin(),]
+
+
         return super().get_permissions()
     
     def get_object(self):
