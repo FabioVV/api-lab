@@ -1,3 +1,4 @@
+from laboratorios.models import Laboratorio
 from reservas.permissions import IsPowerUser, IsteacherOrAdmin
 from reservas.serializers import ReservaSerializer, Reserva
 from rest_framework import viewsets
@@ -9,6 +10,7 @@ from rest_framework.permissions import IsAuthenticated
 from usuarios.models import Usuario_tipo
 import requests as r
 from django.db.models import Q
+from rest_framework.views import APIView
 
 # Create your views here.
 
@@ -79,11 +81,14 @@ class ReservaViewSet(viewsets.ModelViewSet):
 
             request = r.post(url, data=data, headers={ 'Authorization': 'Vf9WSyYqnwxXODjiExToZCT9ByWb3FVsjr' })
 
-
             if request.status_code == 200:
                 request = request.json()
-                serializer.save(user = self.request.user)
 
+                lab_now_booked = Laboratorio.objects.get(id = serializer.validated_data.get('laboratory').id)
+                lab_now_booked.is_booked = True
+                lab_now_booked.save()
+                serializer.save(user = self.request.user)
+    
                 return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
             else:
                 return Response(status=status.HTTP_400_BAD_REQUEST, data={'error':'The payment failed. Please, try again later.'})
@@ -103,13 +108,30 @@ class ReservaViewSet(viewsets.ModelViewSet):
     
     def perform_destroy(self, instance):
         reserva = Reserva.objects.get(id=instance.id)
+        laboratorio = Laboratorio.objects.get(id = reserva.laboratory.id)
 
         if self.request.user == reserva.user:
 
+            laboratorio.is_booked = False
             reserva.is_active = False
+            
             reserva.save()
-
+            laboratorio.save()
         else :
             return False
 
-    
+
+
+
+class MinhasReservas(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, format=None):
+
+        """
+        Return a list of a users bookings.
+        """
+        bookings = Reserva.objects.filter(user = self.request.user)
+        bookings_data = ReservaSerializer(bookings, many=True)
+        return Response(bookings_data.data, status=status.HTTP_200_OK)
+

@@ -4,8 +4,8 @@ from reservas.validators import ReservaValidator
 
 
 class ReservaSerializer(serializers.ModelSerializer):
-    laboratory_name = serializers.CharField(source='laboratory.name')
-    user_name = serializers.CharField(source='user.first_name')
+    laboratory_name = serializers.CharField(source='laboratory.name', required=False)
+    user_name = serializers.CharField(source='user.first_name', required=False)
 
     class Meta:
         model = Reserva
@@ -19,8 +19,10 @@ class ReservaSerializer(serializers.ModelSerializer):
             'bol_number',
             'is_active',
         ]
-
-        extra_kwargs = {'laboratory': {'required': True}, 'bol_number': {'required': True}} 
+        
+        extra_kwargs = {
+                        'laboratory': {'required': True}, 
+                        'bol_number': {'required': True}} 
 
     def validate(self, attrs):
 
