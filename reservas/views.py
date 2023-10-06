@@ -8,6 +8,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from usuarios.models import Usuario_tipo
 import requests as r
+from django.db.models import Q
 
 # Create your views here.
 
@@ -34,6 +35,13 @@ class ReservaViewSet(viewsets.ModelViewSet):
 
 
         return super().get_permissions()
+    
+    def get_queryset(self):
+        
+        #labs = Laboratorio.objects.filter(Q(user = self.request.user) & Q(is_active = True))
+        labs = Reserva.objects.filter(Q(is_active = True))
+
+        return labs
     
     def get_object(self):
         pk = self.kwargs.get('pk', '')

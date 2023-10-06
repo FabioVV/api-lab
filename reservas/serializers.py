@@ -4,13 +4,17 @@ from reservas.validators import ReservaValidator
 
 
 class ReservaSerializer(serializers.ModelSerializer):
+    laboratory_name = serializers.CharField(source='laboratory.name')
+    user_name = serializers.CharField(source='user.first_name')
 
     class Meta:
         model = Reserva
         fields = [
             'id',
             'laboratory',
+            'laboratory_name',
             'user',
+            'user_name',
             'booked_at',
             'bol_number',
             'is_active',
