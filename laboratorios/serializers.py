@@ -1,9 +1,13 @@
 from rest_framework import serializers
 from laboratorios.models import Laboratorio
 from laboratorios.validators import LaboratorioValidator
-
+from random import randint, randrange
 
 class LaboratorioSerializer(serializers.ModelSerializer):
+
+    # bol_Number = serializers.CharField(source='user.first_name', required=False)
+    # total_price = serializers.CharField(required=False)
+
     class Meta:
         model = Laboratorio
         fields = [
@@ -13,9 +17,9 @@ class LaboratorioSerializer(serializers.ModelSerializer):
             'capacity',
             'is_booked',
             'is_active',
+            'price'
         ]
 
-    #sobre_lab = serializers.CharField(max_length=30, source='about')
 
 
     def validate(self, attrs):

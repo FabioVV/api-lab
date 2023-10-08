@@ -40,7 +40,6 @@ class LaboratorioV2viewset(ModelViewSet):
         
         #labs = Laboratorio.objects.filter(Q(user = self.request.user) & Q(is_active = True))
         labs = Laboratorio.objects.filter(Q(is_active = True))
-
         return labs
 
     def get_object(self):
