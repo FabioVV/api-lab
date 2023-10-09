@@ -40,7 +40,8 @@ class ReservaViewSet(viewsets.ModelViewSet):
     
     def get_queryset(self):
         
-        #labs = Laboratorio.objects.filter(Q(user = self.request.user) & Q(is_active = True))
+        #labs = Reserva.objects.filter(Q(is_active = True))
+
         labs = Reserva.objects.filter(Q(is_active = True))
 
         return labs
@@ -113,10 +114,10 @@ class ReservaViewSet(viewsets.ModelViewSet):
         if self.request.user == reserva.user:
 
             laboratorio.is_booked = False
-            reserva.is_active = False
-            
-            reserva.save()
             laboratorio.save()
+            reserva.is_active = False
+            reserva.save()
+            
         else :
             return False
 

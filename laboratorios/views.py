@@ -88,12 +88,14 @@ class LaboratorioV2viewset(ModelViewSet):
         if destroy_instance == None:
             return Response(status=status.HTTP_204_NO_CONTENT)
         elif destroy_instance == False:
-            return Response(status=status.HTTP_403_FORBIDDEN,data={'message':'Laboratory in use.'})
+            return Response(status=status.HTTP_403_FORBIDDEN, data={'message':'Laboratory in use.'})
 
     
     
     def perform_destroy(self, instance):
-        query = Reserva.objects.filter(laboratory__in = Laboratorio.objects.filter(id=instance.id)).all().count()
+        #query = Reserva.objects.filter(laboratory__in = Laboratorio.objects.filter(id=instance.id)).all().count()
+        query = Reserva.objects.filter(Q(laboratory__in=Laboratorio.objects.filter(id=instance.id).all()) & Q(is_active = True)).all().count()  #FALA Q LAB AINDA ESTA EM USO
+
         if query == 0:
 
             lab = Laboratorio.objects.get(id=instance.id)

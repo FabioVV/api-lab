@@ -29,7 +29,7 @@ class ReservaValidator:
     def clean_duplicate_booking(self):
 
         laboratory = self.data.get('laboratory')
-        laboratory_duplicate = Reserva.objects.filter(Q(laboratory__in=Laboratorio.objects.filter(id=laboratory.id).all()) & Q(is_active = True)).all().count()
+        laboratory_duplicate = Reserva.objects.filter(Q(laboratory__in=Laboratorio.objects.filter(id=laboratory.id).all()) & Q(is_active = True)).all().count()  #FALA Q LAB AINDA ESTA EM USO
         
         if laboratory_duplicate > 0:
             self.errors['laboratory'].append('Laboratory in use.')

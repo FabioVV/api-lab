@@ -15,5 +15,12 @@ class IsteacherOrAdmin(permissions.BasePermission):
         pass
     
     def has_permission(self, request, view):
-        return request.user.user_type == Usuario_tipo.objects.get(id = 2) 
+        if request.user.user_type == Usuario_tipo.objects.get(id = 2):
+            return True
+        elif request.user.is_superuser:
+            return True
+        elif request.user.is_staff:
+            return True
+        else:
+            return False
     
