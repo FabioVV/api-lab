@@ -6,6 +6,8 @@ from reservas.validators import ReservaValidator
 class ReservaSerializer(serializers.ModelSerializer):
     laboratory_name = serializers.CharField(source='laboratory.name', required=False)
     user_name = serializers.CharField(source='user.first_name', required=False)
+    username = serializers.CharField(source='user.username', required=False)
+    user_id = serializers.CharField(source='user.id', required=False)
 
     class Meta:
         model = Reserva
@@ -18,6 +20,8 @@ class ReservaSerializer(serializers.ModelSerializer):
             'booked_at',
             'bol_number',
             'is_active',
+            'username',
+            'user_id',
         ]
         
         extra_kwargs = {

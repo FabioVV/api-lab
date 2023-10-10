@@ -61,6 +61,9 @@ class UsuarioViewSet(viewsets.ModelViewSet):
     def partial_update(self, request, *args, **kwargs):
         usuario = self.get_object()
 
+        # NÃO DEIXA A PESSOA MUDAR SEU TIPO DE CONTA
+        del request.data['user_type']
+    
         serializer = UsuarioSerializer(instance=usuario,
                                             data=request.data, 
                                             many=False,
