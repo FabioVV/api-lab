@@ -44,16 +44,15 @@ INSTALLED_APPS = [
     'django_rest_passwordreset',
     'corsheaders',
 
-    #email stuff
+    #email stuff and ussuarios
     'usuarios.apps.UsersConfig',
 
     #AUTENTICACAO JWT
-    # 'rest_framework_simplejwt',
+    'rest_framework_simplejwt',
     # 'rest_framework_simplejwt.token_blacklist',
 
     #NOSSOS APPS
     'laboratorios',
-    #'usuarios',
     'reservas',
 ]
 
@@ -171,8 +170,6 @@ AUTH_USER_MODEL = 'usuarios.Usuario'
 
 
 REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 5,
     'DATETIME_FORMAT': "%d-%m-%Y %H:%M",
 
     # 'DEFAULT_PERMISSION_CLASSES': (
@@ -189,8 +186,8 @@ REST_FRAMEWORK = {
 
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=7),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=14),
 }
 
 
