@@ -134,15 +134,17 @@ class ReservaViewSet(viewsets.ModelViewSet):
 
 
 
-class MinhasReservas(APIView):
+class MinhasReservas(APIView, ReservaV3paginacaoCustomizada):
     permission_classes = [IsAuthenticated]
-
+    
     def get(self, request, format=None):
 
         """
         Return a list of a users bookings.
         """
         bookings = Reserva.objects.filter(user = self.request.user)
-        bookings_data = ReservaSerializer(bookings, many=True)
-        return Response(bookings_data.data, status=status.HTTP_200_OK)
+        result_page = self.paginate_queryset(bookings, request)
+
+        bookings_data = ReservaSerializer(result_page, many=True)
+        return self.get_paginated_response(bookings_data.data)
 
