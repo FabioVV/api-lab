@@ -81,11 +81,10 @@ class UsuarioViewSet(viewsets.ModelViewSet):
     
     # def create(self, request, *args, **kwargs):
         
-            
-    #     serializer = self.get_serializer(data=request.data)
+    #     serializer = UsuarioSerializer(data=request.data)
     #     serializer.is_valid(raise_exception=True)
-    #     if serializer.validated_data['password2']:
-    #         serializer.validated_data.pop('password2')
+    #     # if serializer.validated_data['password_confirmation']:
+    #     #     serializer.validated_data.pop('password_confirmation')
             
     #     serializer.save()
     #     headers = self.get_success_headers(serializer.data)

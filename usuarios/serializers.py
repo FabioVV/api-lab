@@ -56,6 +56,9 @@ class UsuarioSerializer(serializers.ModelSerializer):
         else:
             is_active = True if validated_data['is_active'] == 1 else False
 
+
+        
+
         user = Usuario.objects.create(
             username=validated_data.get('username', ''),
             email=validated_data['email'],
@@ -85,26 +88,6 @@ class UsuarioTipoSerializer(serializers.ModelSerializer):
         ]
 
 
-
-
-# class UsuarioRegistroSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Usuario
-#         fields = [
-#             'first_name',
-#             'username', 
-#             'phone',
-#             'email',
-#             'cpf_cnpj',
-#             'user_type',
-#             'birth_date',
-#             'sex',
-#             'password',
-#             'password_confirmation',
-#         ]
-
-#     def create(self, clean_data):
-#         usuario_obj = Usuario.objects.create
 
 class UsuarioLoginSerializer(serializers.Serializer):
     email = serializers.EmailField()

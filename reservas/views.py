@@ -127,7 +127,6 @@ class ReservaViewSet(viewsets.ModelViewSet):
             laboratorio.save()
             reserva.is_active = False
             reserva.save()
-            
         else :
             return False
 
@@ -142,9 +141,10 @@ class MinhasReservas(APIView, ReservaV3paginacaoCustomizada):
         """
         Return a list of a users bookings.
         """
+        
         bookings = Reserva.objects.filter(user = self.request.user)
         result_page = self.paginate_queryset(bookings, request)
-
         bookings_data = ReservaSerializer(result_page, many=True)
+        
         return self.get_paginated_response(bookings_data.data)
 

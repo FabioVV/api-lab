@@ -18,16 +18,17 @@ class UsuarioValidator:
 
         # laboratorio = self.data.get('laboratorio')
         # usuario = self.data.get('usuario')
-
+        if self.errors:
+            raise self.ErrorClass(self.errors)
     
 
     def clean_password(self):
 
         password = self.data.get('password')
-        password2 = self.data.get('password2')
+        password2 = self.data.get('password_confirmation')
 
         if password != password2:
-            self.errors[password].append('As duas senhas precisam ser iguais.')
+            self.errors[password].append('The passwords must match.')
     
 
 
