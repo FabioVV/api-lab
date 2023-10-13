@@ -24,9 +24,11 @@ def password_reset_token_created(sender, instance, reset_password_token, *args, 
         'username': reset_password_token.user.username,
         'email': reset_password_token.user.email,
         'token': reset_password_token.key,
-        'reset_password_url': "{}?token={}".format(
-            instance.request.build_absolute_uri(reverse('password_reset:reset-password-confirm')),
-            reset_password_token.key)
+        'reset_password_url': "{}?token={}".format('http://localhost:3000/users/password-reset/confirm',reset_password_token.key)
+
+        # 'reset_password_url': "{}?token={}".format(
+        #     instance.request.build_absolute_uri(reverse('password_reset:reset-password-confirm')),
+        #     reset_password_token.key)
     }
 
     # render email text
@@ -35,7 +37,7 @@ def password_reset_token_created(sender, instance, reset_password_token, *args, 
 
     msg = EmailMultiAlternatives(
         # title:
-        "Password Reset for {title}".format(title="Lab API"),
+        "Alteração de senha para {title}".format(title="Lab API"),
         # message:
         email_plaintext_message,
         # from:
