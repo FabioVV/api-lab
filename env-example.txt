@@ -1,0 +1,28 @@
+# 0 = false, 1 = true
+
+
+
+EMAIL_PORT = 587  # Replace with your email port
+EMAIL_USE_TLS = 1  # Set to False if your email server doesn't use TLS
+EMAIL_HOST = 'smtp.gmail.com'  # Replace with your email host for gmail -> 'smtp.gmail.com'
+EMAIL_HOST_USER = 'restsistema@gmail.com'  # Replace with your email username
+EMAIL_HOST_PASSWORD = 'jviriijzxtcqbjjl'  # Replace with your email password
+## NAO APAGAR, MUITO IMPORTANTE!!!!!
+# SENHA API PROJECT = jviriijzxtcqbjjl 
+
+
+SECRET_KEY = "insecure"
+
+
+'Use this code below to generate a secure secret key. 
+Open your terminal and enter django shell using: python manage.py shell
+And then copy and paste this code, run, then copy and paste the string generated into the secret_key constant above.'
+
+python -c "import string as s; from random import SystemRandom as sr; print(''.join(sr().choices(s.ascii_letters + s.punctuation, k=64)))"
+
+
+# 0 = false, 1 = true
+DEBUG = 1
+
+
+

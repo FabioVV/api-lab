@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+import os
 from pathlib import Path
 from datetime import timedelta
 
@@ -21,15 +21,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'reygr 987 TF976afg 8YEBF bd mPLDFVM Oídjhfvou iHwv$)0h452tt6hljy%xn=!jtnf1mcw=+(k&^n*qgbr37z13$f#'
+SECRET_KEY = 'aaaaaaa'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
-
-
+DEBUG = 1
 # Application definition
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -186,10 +183,9 @@ REST_FRAMEWORK = {
 
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=7),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=14),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=2),
 }
-
 
 
 
@@ -205,6 +201,8 @@ EMAIL_USE_TLS = True  # Set to False if your email server doesn't use TLS
 EMAIL_HOST = 'smtp.gmail.com'  # Replace with your email host for gmail -> 'smtp.gmail.com'
 EMAIL_HOST_USER = 'restsistema@gmail.com'  # Replace with your email username
 EMAIL_HOST_PASSWORD = 'jviriijzxtcqbjjl'  # Replace with your email password
+## NAO APAGAR, MUITO IMPORTANTE!!!!!
+# SENHA API PROJECT = jviriijzxtcqbjjl 
 
 
 
@@ -226,11 +224,6 @@ TEMPLATES = [
 
 
 
-## NAO APAGAR, MUITO IMPORTANTE!!!!!
-# SENHA API PROJECT = jviriijzxtcqbjjl 
-
-
-# PARA PODER FAZER REQUISIÇÕES DE QUALQUER LUGAR 
 ALLOWED_HOSTS=['*']
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
