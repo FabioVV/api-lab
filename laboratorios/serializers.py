@@ -7,6 +7,7 @@ class LaboratorioSerializer(serializers.ModelSerializer):
 
     # bol_Number = serializers.CharField(source='user.first_name', required=False)
     # total_price = serializers.CharField(required=False)
+    user_id = serializers.CharField(source='user.id', required=False)
 
     class Meta:
         model = Laboratorio
@@ -17,7 +18,8 @@ class LaboratorioSerializer(serializers.ModelSerializer):
             'capacity',
             'is_booked',
             'is_active',
-            'price'
+            'price',
+            'user_id'
         ]
 
 

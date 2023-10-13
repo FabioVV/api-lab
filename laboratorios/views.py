@@ -49,7 +49,7 @@ class LaboratorioV2viewset(ModelViewSet):
     def get_queryset(self):
         
         #labs = Laboratorio.objects.filter(Q(user = self.request.user) & Q(is_active = True))
-        labs = Laboratorio.objects.filter(Q(is_active = True))
+        labs = Laboratorio.objects.filter(Q(is_active = True)).order_by('-id')
         return labs
 
     def get_object(self):

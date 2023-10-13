@@ -52,7 +52,7 @@ class ReservaViewSet(viewsets.ModelViewSet):
         
         #labs = Reserva.objects.filter(Q(is_active = True))
 
-        labs = Reserva.objects.filter(Q(is_active = True))
+        labs = Reserva.objects.filter(Q(is_active = True)).order_by('-id')
 
         return labs
     
@@ -142,7 +142,7 @@ class MinhasReservas(APIView, ReservaV3paginacaoCustomizada):
         Return a list of a users bookings.
         """
         
-        bookings = Reserva.objects.filter(user = self.request.user)
+        bookings = Reserva.objects.filter(user = self.request.user).order_by('-id')
         result_page = self.paginate_queryset(bookings, request)
         bookings_data = ReservaSerializer(result_page, many=True)
         
