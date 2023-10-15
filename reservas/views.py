@@ -77,7 +77,7 @@ class ReservaViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
 
-        if self.request.user.user_type == Usuario_tipo.objects.get(id = 2):
+        if self.request.user.user_type == Usuario_tipo.objects.get(id = 2) or self.request.user.is_staff or self.request.user.is_superuser:
 
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
@@ -112,7 +112,7 @@ class ReservaViewSet(viewsets.ModelViewSet):
         if destroy_instance == None:
             return Response(status=status.HTTP_204_NO_CONTENT)
         elif destroy_instance == False:
-            return Response(status=status.HTTP_403_FORBIDDEN,data={'error':'Cannot deactivate booking. Is it your booking?'})
+            return Response(status=status.HTTP_403_FORBIDDEN, data={'error':'Cannot deactivate booking. Is it your booking?'})
 
     
     def perform_destroy(self, instance):
@@ -129,8 +129,6 @@ class ReservaViewSet(viewsets.ModelViewSet):
             return False
 
 
-
-
 class MinhasReservas(APIView, ReservaV3paginacaoCustomizada):
     permission_classes = [IsAuthenticated]
     
@@ -145,4 +143,3 @@ class MinhasReservas(APIView, ReservaV3paginacaoCustomizada):
         bookings_data = ReservaSerializer(result_page, many=True)
         
         return self.get_paginated_response(bookings_data.data)
-

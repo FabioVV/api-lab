@@ -160,12 +160,15 @@ class UsuarioLogin(APIView):
     def post(self, request):
         data = request.data
         serializer = UsuarioLoginSerializer(data=data)
+
         if serializer.is_valid(raise_exception=True):
             user = authenticate(email = request.data['email'], password = request.data['password'])
+            
             if user:
                 login(request, user)
                 user = Usuario.objects.get(email = serializer.data['email'])
                 user = UsuarioSerializer(user)
+
                 return Response(user.data, status=status.HTTP_200_OK)
             else:
                 return Response({'detail': 'Usuário não encontrado. Por favor, revise seu email e senha.'}, status=status.HTTP_401_UNAUTHORIZED)
