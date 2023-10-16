@@ -12,6 +12,7 @@
 from django.urls import path, include
 from rest_framework.routers import SimpleRouter
 from . import views
+from laboratorios.views import LaboratoriosNaoReservados
 # from rest_framework_simplejwt.views import (
 #     TokenObtainPairView,
 #     TokenRefreshView,
@@ -43,6 +44,8 @@ urlpatterns = [
 
     #USING ROUTERS +++++  FORMA MAIS FACIL DE GERAR TODAS AS ROTAS
     path('api/v3/laboratorios/', include(router.urls)),
+    path('api/v3/unbooked-labs/', LaboratoriosNaoReservados.as_view(), name='minhas reservas'),
+
 ]
 
 #urlpatterns += router.urls

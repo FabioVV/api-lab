@@ -14,6 +14,7 @@ from rest_framework import status
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
 # from rest_framework.views import APIView
 
 
@@ -113,6 +114,28 @@ class LaboratorioV2viewset(ModelViewSet):
 
         else:
             return False
+
+
+
+
+class LaboratoriosNaoReservados(APIView, LaboratorioV3paginacaoCustomizada):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request, format=None):
+
+        """
+        Return a list of all active unbooked labs
+        """
+        
+        labs = Laboratorio.objects.filter(Q(is_booked = False) & Q(is_active = True)).order_by('-id')
+        result_page = self.paginate_queryset(labs, request)
+        labs_data = LaboratorioSerializer(result_page, many=True)
+        
+        return self.get_paginated_response(labs_data.data)
+
+
+
+
 
 
 
