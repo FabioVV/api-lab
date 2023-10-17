@@ -64,10 +64,17 @@ class ReservaViewSet(viewsets.ModelViewSet):
 
     def partial_update(self, request, *args, **kwargs):
         reserva = self.get_object()
+
+
         old_lab = Laboratorio.objects.get(Q(id = reserva.laboratory.id))
         new_lab = Laboratorio.objects.get(Q(id = request.data['laboratory']))
 
-        
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        headers = self.get_success_headers(serializer.validated_data)
+        boleto_number = serializer.validated_data.get('bol_number')
+
+
 
         serializer = ReservaSerializer(instance=reserva,
                                             data=request.data, 
@@ -79,13 +86,18 @@ class ReservaViewSet(viewsets.ModelViewSet):
         new_lab.is_booked = True
         serializer.is_valid(raise_exception=True)
 
+        url = "https://api-go-wash-efc9c9582687.herokuapp.com/api/pay-boleto"
+        data = {'boleto': boleto_number, 'user_id': self.request.user.id, }
+        request = r.post(url, data=data, headers={ 'Authorization': 'Vf9WSyYqnwxXODjiExToZCT9ByWb3FVsjr' })
 
+        if request.status_code == 200:
 
-        old_lab.save()
-        new_lab.save()
-        serializer.save()
-        return Response(serializer.data)
-    
+            old_lab.save()
+            new_lab.save()
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST, data={'error':'O pagamento falhou. Por favor, tente novamente.'})
 
 
     def create(self, request, *args, **kwargs):
@@ -113,9 +125,9 @@ class ReservaViewSet(viewsets.ModelViewSet):
     
                 return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
             else:
-                return Response(status=status.HTTP_400_BAD_REQUEST, data={'error':'The payment failed. Please, try again later.'})
+                return Response(status=status.HTTP_400_BAD_REQUEST, data={'error':'O pagamento falhou. Por favor, tente novamente.'})
         else:
-            return Response(status=status.HTTP_400_BAD_REQUEST, data={'error':'Only teachers can make bookings.'})
+            return Response(status=status.HTTP_400_BAD_REQUEST, data={'error':'Only teachers, staff members and superusers can make bookings.'})
 
 
     def destroy(self, request, *args, **kwargs):
@@ -125,7 +137,7 @@ class ReservaViewSet(viewsets.ModelViewSet):
         if destroy_instance == None:
             return Response(status=status.HTTP_204_NO_CONTENT)
         elif destroy_instance == False:
-            return Response(status=status.HTTP_403_FORBIDDEN, data={'error':'Cannot deactivate booking. Is it your booking?'})
+            return Response(status=status.HTTP_403_FORBIDDEN, data={'error':'Você não pode desativar essa reserva. '})
 
     
     def perform_destroy(self, instance):
