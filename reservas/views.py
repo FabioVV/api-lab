@@ -61,15 +61,28 @@ class ReservaViewSet(viewsets.ModelViewSet):
         self.check_object_permissions(self.request, obj)
         return obj
     
+
     def partial_update(self, request, *args, **kwargs):
         reserva = self.get_object()
+        old_lab = Laboratorio.objects.get(Q(id = reserva.laboratory.id))
+        new_lab = Laboratorio.objects.get(Q(id = request.data['laboratory']))
+
+        
 
         serializer = ReservaSerializer(instance=reserva,
                                             data=request.data, 
                                             many=False,
                                             partial=True,)
+        
+
+        old_lab.is_booked = False
+        new_lab.is_booked = True
         serializer.is_valid(raise_exception=True)
 
+
+
+        old_lab.save()
+        new_lab.save()
         serializer.save()
         return Response(serializer.data)
     
