@@ -98,7 +98,7 @@ class LaboratorioV2viewset(ModelViewSet):
         if destroy_instance == None:
             return Response(status=status.HTTP_204_NO_CONTENT)
         elif destroy_instance == False:
-            return Response(status=status.HTTP_403_FORBIDDEN, data={'message':'Laboratory in use.'})
+            return Response(status=status.HTTP_403_FORBIDDEN, data={'error':'Laboratory in use.'})
 
     
     
