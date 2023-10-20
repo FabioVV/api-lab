@@ -5,6 +5,14 @@ from reservas.models import Reserva
 from django.db.models import Q
 
 
+def check_bookings_expiration():
+
+    reservas_check = Reserva.objects.filter(is_active = True)
+
+    for reserva in reservas_check:
+        reserva.expired_booking
+        
+
 class ReservaValidator:
     def __init__(self, data, errors=None, ErrorClass=None):
         self.errors = defaultdict(list) if errors is None else errors
@@ -17,13 +25,10 @@ class ReservaValidator:
         
         self.clean_duplicate_booking()
         self.check_boleto_number()
-        
-        # laboratorio = self.data.get('laboratorio')
-        # usuario = self.data.get('usuario')
+
+
         if self.errors:
             raise self.ErrorClass(self.errors)
-
-
     
 
     def clean_duplicate_booking(self):
@@ -41,4 +46,3 @@ class ReservaValidator:
 
         if boleto is None or boleto == "":
             self.errors['bol_number'].append('Could not confirm the boleto number')
-

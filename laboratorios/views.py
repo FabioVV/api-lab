@@ -15,6 +15,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
+from reservas.validators import check_bookings_expiration
 # from rest_framework.views import APIView
 
 
@@ -48,7 +49,8 @@ class LaboratorioV2viewset(ModelViewSet):
         
     def get_queryset(self):
         
-        #labs = Laboratorio.objects.filter(Q(user = self.request.user) & Q(is_active = True))
+        check_bookings_expiration()
+
         labs = Laboratorio.objects.filter(Q(is_active = True)).order_by('-id')
         return labs
 
@@ -126,6 +128,8 @@ class LaboratoriosNaoReservados(APIView, LaboratorioV3paginacaoCustomizada):
         """
         Return a list of all active unbooked labs
         """
+
+        check_bookings_expiration()
         
         labs = Laboratorio.objects.filter(Q(is_booked = False) & Q(is_active = True)).order_by('-id')
         result_page = self.paginate_queryset(labs, request)

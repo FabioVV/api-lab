@@ -18,5 +18,5 @@ class Laboratorio(db.Model):
     is_active = db.BooleanField(default=True)
     is_booked = db.BooleanField(default=False)
 
-    readonly_fields = ('total_price', 'price')
+    readonly_fields = ('price')
 

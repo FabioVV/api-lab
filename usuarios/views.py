@@ -13,6 +13,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from usuarios.permissions import IsHimself, IsAuth
 from django.db.models import Q
 from rest_framework import status
+from reservas.validators import check_bookings_expiration
 
 # Create your views here.
 
@@ -51,6 +52,8 @@ class UsuarioViewSet(viewsets.ModelViewSet):
     
 
     def get_object(self):
+        check_bookings_expiration()
+
         pk = self.kwargs.get('pk', '')
         obj = get_object_or_404(self.get_queryset(), pk=pk)
 
@@ -114,7 +117,7 @@ class UsuarioTipoViewSet(viewsets.ModelViewSet):
     pagination_class = UsuarioV3paginacaoCustomizada
     permission_classes = [IsAuthenticated]
     http_method_names = ['get']
-
+    
 
 
 

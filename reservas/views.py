@@ -11,8 +11,9 @@ from usuarios.models import Usuario_tipo
 import requests as r
 from django.db.models import Q
 from rest_framework.views import APIView
-
+from reservas.validators import check_bookings_expiration
 # Create your views here.
+
 
 ## PAGINAÇÃO
 class ReservaV3paginacaoCustomizada(PageNumberPagination):
@@ -50,15 +51,17 @@ class ReservaViewSet(viewsets.ModelViewSet):
     
     def get_queryset(self):
         
-        labs = Reserva.objects.filter(Q(is_active = True)).order_by('-id')
+        check_bookings_expiration()
 
-        return labs
+        reservas = Reserva.objects.filter(Q(is_active = True)).order_by('-id')
+        return reservas
     
     def get_object(self):
         pk = self.kwargs.get('pk', '')
+        
         obj = get_object_or_404(self.get_queryset(), pk=pk)
-
         self.check_object_permissions(self.request, obj)
+
         return obj
     
 
@@ -162,7 +165,8 @@ class MinhasReservas(APIView, ReservaV3paginacaoCustomizada):
         """
         Return a list of all the bookings of a user
         """
-        
+
+        check_bookings_expiration()
         bookings = Reserva.objects.filter(user = self.request.user).order_by('-id')
         result_page = self.paginate_queryset(bookings, request)
         bookings_data = ReservaSerializer(result_page, many=True)

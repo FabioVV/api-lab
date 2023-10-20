@@ -22,11 +22,13 @@ class ReservaSerializer(serializers.ModelSerializer):
             'is_active',
             'username',
             'user_id',
+            'booking_end',
         ]
         
         extra_kwargs = {
                         'laboratory': {'required': True}, 
-                        'bol_number': {'required': True}} 
+                        'bol_number': {'required': True},
+                        'booking_end': {'required': True}} 
 
     def validate(self, attrs):
 
