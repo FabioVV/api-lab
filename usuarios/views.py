@@ -66,6 +66,9 @@ class UsuarioViewSet(viewsets.ModelViewSet):
 
         # NÃO DEIXA A PESSOA MUDAR SEU TIPO DE CONTA
         del request.data['user_type']
+        del request.data['is_staff']
+        del request.data['is_superuser']
+
     
         serializer = UsuarioSerializer(instance=usuario,
                                             data=request.data, 

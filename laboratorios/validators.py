@@ -20,7 +20,7 @@ class LaboratorioValidator:
         about = self.data.get('about')
 
         if name == about:
-            self.errors[name].append('O campo nome não pode ser igual ao campo de sobre.')
+            self.errors['lab_name_about'].append('O campo nome não pode ser igual ao campo de sobre.')
 
         if self.errors:
             raise self.ErrorClass(self.errors)
