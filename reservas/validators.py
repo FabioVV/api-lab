@@ -4,7 +4,8 @@ from laboratorios.models import Laboratorio
 from reservas.models import Reserva
 from django.db.models import Q
 
-
+# colocar isso aqui dentro da classe de reserva abaixo
+# ai n preciso chamar em toda rota, ja q todas as rotas utilizam o serializer 
 def check_bookings_expiration():
 
     reservas_check = Reserva.objects.filter(is_active = True)
