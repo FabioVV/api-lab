@@ -1,7 +1,3 @@
-
-# Create your views here.
-
-
 #from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from laboratorios.models import Laboratorio
@@ -17,6 +13,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from reservas.validators import check_bookings_expiration
 # from rest_framework.views import APIView
+
+
+# Create your views here.
 
 
 
@@ -45,6 +44,17 @@ class LaboratorioV2viewset(ModelViewSet):
     serializer_class = LaboratorioSerializer
     pagination_class = LaboratorioV3paginacaoCustomizada
     permission_classes = [IsAuthenticated,]
+
+
+    # def get_queryset(self):
+        
+        ## DINT WORK
+    #     check_bookings_expiration()
+
+    #     labs = Laboratorio.objects.filter(Q(is_active = True)).order_by('-id')
+    #     labs_data = LaboratorioSerializer(labs, many=True)
+        
+    #     return labs_data.data
 
         
     def get_queryset(self):
