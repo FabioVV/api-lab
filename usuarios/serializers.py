@@ -4,6 +4,43 @@ from usuarios.validators import UsuarioValidator
 from django.contrib.auth.password_validation import validate_password
 from datetime import datetime
 
+
+
+
+
+class UsuarioSerializerPatch(serializers.ModelSerializer):
+
+    class Meta:
+        model = Usuario
+        fields = [
+            'id',
+            'first_name',
+            'username',
+            'phone',
+            'email',
+            'cpf_cnpj',
+            'birth_date',
+            'sex',
+            'is_active',
+            'last_name',
+        ]
+        extra_kwargs = {'birth_date': {'required': True}} 
+
+        
+
+    def validate(self, attrs):
+        
+        UsuarioValidator(data=attrs, ErrorClass=serializers.ValidationError)
+
+        return super().validate(attrs)
+    
+
+
+
+
+
+
+
 class UsuarioSerializer(serializers.ModelSerializer):
 
     password = serializers.CharField(write_only=True, validators=[validate_password])

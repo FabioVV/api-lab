@@ -1,4 +1,4 @@
-from usuarios.serializers import UsuarioSerializer, ChangePasswordSerilizer, Usuario, Usuario_tipo, UsuarioTipoSerializer, UsuarioLoginSerializer
+from usuarios.serializers import UsuarioSerializer, ChangePasswordSerilizer, Usuario, Usuario_tipo, UsuarioTipoSerializer, UsuarioLoginSerializer, UsuarioSerializerPatch
 from rest_framework import viewsets, permissions
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
@@ -64,13 +64,13 @@ class UsuarioViewSet(viewsets.ModelViewSet):
     def partial_update(self, request, *args, **kwargs):
         usuario = self.get_object()
 
-        # NÃO DEIXA A PESSOA MUDAR SEU TIPO DE CONTA
-        del request.data['user_type']
-        del request.data['is_staff']
-        del request.data['is_superuser']
+        # NÃO DEIXA A PESSOA MUDAR SEU TIPO DE CONTA # ATUALIZADO PARA: USANDO UM SERIALIZER DIEFERENTE PARA UPDATES
+        # del request.data['user_type']
+        # del request.data['is_staff']
+        # del request.data['is_superuser']
 
     
-        serializer = UsuarioSerializer(instance=usuario,
+        serializer = UsuarioSerializerPatch(instance=usuario,
                                             data=request.data, 
                                             many=False,
                                             partial=True,)
