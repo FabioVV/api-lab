@@ -160,8 +160,22 @@ class LaboratoriosSearch(APIView, LaboratorioV3paginacaoCustomizada):
 
         check_bookings_expiration()
         search = self.request.query_params.get('q','').strip()
+        booked = self.request.query_params.get('booked','').strip()
+        query = Q()
         
-        labs = Laboratorio.objects.filter(Q(is_booked = False) & Q(is_active = True) & Q(name__icontains=search)).order_by('-id')
+        if search:
+            query &= Q(name__icontains=search)
+
+        if booked == 'R':
+            query &= Q(is_booked = True)
+        elif booked == 'N':
+            query &= Q(is_booked = False)
+        elif booked == '':
+            pass
+
+
+
+        labs = Laboratorio.objects.filter(Q(is_active = True) & query).order_by('-id')
         result_page = self.paginate_queryset(labs, request)
         labs_data = LaboratorioSerializer(result_page, many=True)
         

@@ -185,8 +185,21 @@ class MinhasReservasSearch(APIView, ReservaV3paginacaoCustomizada):
         check_bookings_expiration()
 
         search = self.request.query_params.get('q','').strip()
+        booked = self.request.query_params.get('booked','').strip()
 
-        bookings = Reserva.objects.filter(Q(user = self.request.user) & Q(laboratory__in = Laboratorio.objects.filter(name__icontains=search))).order_by('-id')
+        query = Q()
+        
+        if search:
+            query &= Q(laboratory__in = Laboratorio.objects.filter(name__icontains=search))
+
+        if booked == 'R':
+            query &= Q(laboratory__in = Laboratorio.objects.filter(is_booked=True))
+        elif booked == 'N':
+            query &= Q(laboratory__in = Laboratorio.objects.filter(is_booked=False))
+        elif booked == '':
+            pass
+
+        bookings = Reserva.objects.filter(Q(user = self.request.user) & query).order_by('-id')
         result_page = self.paginate_queryset(bookings, request)
         bookings_data = ReservaSerializer(result_page, many=True)
         
