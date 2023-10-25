@@ -12,7 +12,7 @@
 from django.urls import path, include
 from rest_framework.routers import SimpleRouter
 from . import views
-from laboratorios.views import LaboratoriosNaoReservados
+from laboratorios.views import LaboratoriosNaoReservados, LaboratoriosSearch
 # from rest_framework_simplejwt.views import (
 #     TokenObtainPairView,
 #     TokenRefreshView,
@@ -40,11 +40,12 @@ urlpatterns = [
     # path('api/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     # path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     # path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
-    # path('api/logout/', views.LogoutView.as_view(), name='token_logout'),
 
     #USING ROUTERS +++++  FORMA MAIS FACIL DE GERAR TODAS AS ROTAS
     path('api/v3/laboratorios/', include(router.urls)),
     path('api/v3/unbooked-labs/', LaboratoriosNaoReservados.as_view(), name='minhas reservas'),
+    path('api/v3/search-labs/', LaboratoriosSearch.as_view(), name='reservas procura'),
+
 
 ]
 

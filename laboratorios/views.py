@@ -149,6 +149,23 @@ class LaboratoriosNaoReservados(APIView, LaboratorioV3paginacaoCustomizada):
 
 
 
+class LaboratoriosSearch(APIView, LaboratorioV3paginacaoCustomizada):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request, format=None):
+
+        """
+        Return a list of all active unbooked labs
+        """
+
+        check_bookings_expiration()
+        search = self.request.query_params.get('q','').strip()
+        
+        labs = Laboratorio.objects.filter(Q(is_booked = False) & Q(is_active = True) & Q(name__icontains=search)).order_by('-id')
+        result_page = self.paginate_queryset(labs, request)
+        labs_data = LaboratorioSerializer(result_page, many=True)
+        
+        return self.get_paginated_response(labs_data.data) 
 
 
 

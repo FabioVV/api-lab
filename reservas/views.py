@@ -128,9 +128,9 @@ class ReservaViewSet(viewsets.ModelViewSet):
     
                 return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
             else:
-                return Response(status=status.HTTP_400_BAD_REQUEST, data={'error':'O pagamento falhou. Por favor, tente novamente.'})
+                return Response(status=status.HTTP_400_BAD_REQUEST, data={'error_payment':'O pagamento falhou. Por favor, tente novamente ou entre em contato com o nosso time.'})
         else:
-            return Response(status=status.HTTP_400_BAD_REQUEST, data={'error':'Only teachers, staff members and superusers can make bookings.'})
+            return Response(status=status.HTTP_400_BAD_REQUEST, data={'error_booking':'Apenas professores, funcionários e administradores podem fazer reservas.'})
 
 
     def destroy(self, request, *args, **kwargs):
@@ -140,7 +140,7 @@ class ReservaViewSet(viewsets.ModelViewSet):
         if destroy_instance == None:
             return Response(status=status.HTTP_204_NO_CONTENT)
         elif destroy_instance == False:
-            return Response(status=status.HTTP_403_FORBIDDEN, data={'error':'Você não pode desativar essa reserva. '})
+            return Response(status=status.HTTP_403_FORBIDDEN, data={'error_del_booking':'Você não pode desativar essa reserva. '})
 
     
     def perform_destroy(self, instance):
@@ -168,6 +168,45 @@ class MinhasReservas(APIView, ReservaV3paginacaoCustomizada):
 
         check_bookings_expiration()
         bookings = Reserva.objects.filter(user = self.request.user).order_by('-id')
+        result_page = self.paginate_queryset(bookings, request)
+        bookings_data = ReservaSerializer(result_page, many=True)
+        
+        return self.get_paginated_response(bookings_data.data)
+
+
+class MinhasReservasSearch(APIView, ReservaV3paginacaoCustomizada):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request, format=None):
+
+        """
+        Return a list of all the bookings of a user
+        """
+        check_bookings_expiration()
+
+        search = self.request.query_params.get('q','').strip()
+
+        bookings = Reserva.objects.filter(Q(user = self.request.user) & Q(laboratory__in = Laboratorio.objects.filter(name__icontains=search))).order_by('-id')
+        result_page = self.paginate_queryset(bookings, request)
+        bookings_data = ReservaSerializer(result_page, many=True)
+        
+        return self.get_paginated_response(bookings_data.data)
+
+
+
+class ReservasSearch(APIView, ReservaV3paginacaoCustomizada):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request, format=None):
+
+        """
+        Return a list of all the bookings of a user
+        """
+        check_bookings_expiration()
+
+        search = self.request.query_params.get('q','').strip()
+
+        bookings = Reserva.objects.filter(Q(is_active = True) & Q(laboratory__in = Laboratorio.objects.filter(name__icontains=search))).order_by('-id')
         result_page = self.paginate_queryset(bookings, request)
         bookings_data = ReservaSerializer(result_page, many=True)
         
