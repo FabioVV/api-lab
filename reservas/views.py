@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
-from usuarios.models import Usuario_tipo
+from usuarios.models import Usuario, Usuario_tipo
 import requests as r
 from django.db.models import Q
 from rest_framework.views import APIView
@@ -205,8 +205,16 @@ class ReservasSearch(APIView, ReservaV3paginacaoCustomizada):
         check_bookings_expiration()
 
         search = self.request.query_params.get('q','').strip()
+        username =  self.request.query_params.get('username','').strip()
+        query = Q()
+        
+        if search:
+            query &= Q(laboratory__in = Laboratorio.objects.filter(name__icontains=search))
 
-        bookings = Reserva.objects.filter(Q(is_active = True) & Q(laboratory__in = Laboratorio.objects.filter(name__icontains=search))).order_by('-id')
+        if username:
+            query &= Q(user__in = Usuario.objects.filter(username__icontains=username))
+
+        bookings = Reserva.objects.filter(Q(is_active = True) & query).order_by('-id')
         result_page = self.paginate_queryset(bookings, request)
         bookings_data = ReservaSerializer(result_page, many=True)
         
