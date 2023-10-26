@@ -81,7 +81,6 @@ class UsuarioSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
 
         is_active = validated_data.get('is_active', '')
-        last_name = validated_data.get('last_name', '')
 
 
         if is_active == '':
@@ -98,7 +97,7 @@ class UsuarioSerializer(serializers.ModelSerializer):
             sex=validated_data.get('sex', 'N'),
             phone=validated_data.get('phone', '000000000'),
             first_name=validated_data['first_name'],
-            last_name=last_name,
+            last_name=validated_data.get('last_name', ''),
             cpf_cnpj=validated_data['cpf_cnpj'],
             user_type=validated_data['user_type'],
             is_active = is_active,

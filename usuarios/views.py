@@ -138,8 +138,8 @@ def change_password(request):
                 request.user.set_password(serializer.data.get['old_password'])
                 request.user.save()
                 update_session_auth_hash(request, request.user)  # To update session after password change
-                return Response({'message': 'Password changed successfully.'}, status=status.HTTP_200_OK)
-            return Response({'error': 'Incorrect old password.'}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'message': 'Senha alterada com sucesso.'}, status=status.HTTP_200_OK)
+            return Response({'error': 'Senha antiga incorreta.'}, status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -147,45 +147,45 @@ def change_password(request):
 
 ### REGISTER AND LOGIN AND LOGOUT
 
-class UsuarioRegistro(APIView):
-    permission_classes = [permissions.AllowAny,]
+# class UsuarioRegistro(APIView):
+#     permission_classes = [permissions.AllowAny,]
 
-    def post(self, request):
-        serializer = UsuarioSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            user = serializer.create(request.data)
-            if user:
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+#     def post(self, request):
+#         serializer = UsuarioSerializer(data=request.data)
+#         if serializer.is_valid(raise_exception=True):
+#             user = serializer.create(request.data)
+#             if user:
+#                 return Response(serializer.data, status=status.HTTP_201_CREATED)
+#         return Response(status=status.HTTP_400_BAD_REQUEST)
 
  
-class UsuarioLogin(APIView):
-    # permission_classes = [permissions.AllowAny,]
-    # authentication_classes = [SessionAuthentication,]
+# class UsuarioLogin(APIView):
+#     # permission_classes = [permissions.AllowAny,]
+#     # authentication_classes = [SessionAuthentication,]
 
-    def post(self, request):
-        data = request.data
-        serializer = UsuarioLoginSerializer(data=data)
+#     def post(self, request):
+#         data = request.data
+#         serializer = UsuarioLoginSerializer(data=data)
 
-        if serializer.is_valid(raise_exception=True):
-            user = authenticate(email = request.data['email'], password = request.data['password'])
+#         if serializer.is_valid(raise_exception=True):
+#             user = authenticate(email = request.data['email'], password = request.data['password'])
             
-            if user:
-                login(request, user)
-                user = Usuario.objects.get(email = serializer.data['email'])
-                user = UsuarioSerializer(user)
+#             if user:
+#                 login(request, user)
+#                 user = Usuario.objects.get(email = serializer.data['email'])
+#                 user = UsuarioSerializer(user)
 
-                return Response(user.data, status=status.HTTP_200_OK)
-            else:
-                return Response({'detail': 'Usuário não encontrado. Por favor, revise seu email e senha.'}, status=status.HTTP_401_UNAUTHORIZED)
-
-
+#                 return Response(user.data, status=status.HTTP_200_OK)
+#             else:
+#                 return Response({'detail': 'Usuário não encontrado. Por favor, revise seu email e senha.'}, status=status.HTTP_401_UNAUTHORIZED)
 
 
-class UsuarioLogout(APIView):
-    permission_classes = [permissions.IsAuthenticated,]
 
-    def post(self, request):
-        logout(request)
-        return Response(status=status.HTTP_200_OK)
+
+# class UsuarioLogout(APIView):
+#     permission_classes = [permissions.IsAuthenticated,]
+
+#     def post(self, request):
+#         logout(request)
+#         return Response(status=status.HTTP_200_OK)
 
