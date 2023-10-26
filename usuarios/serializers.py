@@ -15,6 +15,7 @@ class UsuarioSerializerPatch(serializers.ModelSerializer):
         fields = [
             'id',
             'first_name',
+            'last_name',
             'username',
             'phone',
             'email',
@@ -22,7 +23,6 @@ class UsuarioSerializerPatch(serializers.ModelSerializer):
             'birth_date',
             'sex',
             'is_active',
-            'last_name',
         ]
         extra_kwargs = {'birth_date': {'required': True}} 
 
@@ -34,11 +34,6 @@ class UsuarioSerializerPatch(serializers.ModelSerializer):
 
         return super().validate(attrs)
     
-
-
-
-
-
 
 
 class UsuarioSerializer(serializers.ModelSerializer):
@@ -86,13 +81,13 @@ class UsuarioSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
 
         is_active = validated_data.get('is_active', '')
+        last_name = validated_data.get('last_name', '')
 
 
         if is_active == '':
             is_active = True
         else:
             is_active = True if validated_data['is_active'] == 1 else False
-
 
         
 
@@ -103,6 +98,7 @@ class UsuarioSerializer(serializers.ModelSerializer):
             sex=validated_data.get('sex', 'N'),
             phone=validated_data.get('phone', '000000000'),
             first_name=validated_data['first_name'],
+            last_name=last_name,
             cpf_cnpj=validated_data['cpf_cnpj'],
             user_type=validated_data['user_type'],
             is_active = is_active,
