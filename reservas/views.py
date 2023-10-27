@@ -188,6 +188,7 @@ class MinhasReservasSearch(APIView, ReservaV3paginacaoCustomizada):
         booked = self.request.query_params.get('booked','').strip()
 
         query = Q()
+
         
         if search:
             query &= Q(laboratory__in = Laboratorio.objects.filter(name__icontains=search))

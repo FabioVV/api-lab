@@ -8,6 +8,7 @@ class ReservaSerializer(serializers.ModelSerializer):
     user_name = serializers.CharField(source='user.first_name', required=False)
     username = serializers.CharField(source='user.username', required=False)
     user_id = serializers.CharField(source='user.id', required=False)
+    laboratory_id = serializers.CharField(source='laboratory.id', required=False)
 
     class Meta:
         model = Reserva
@@ -23,12 +24,13 @@ class ReservaSerializer(serializers.ModelSerializer):
             'username',
             'user_id',
             'booking_end',
+            'laboratory_id',
         ]
         
         extra_kwargs = {
                         'laboratory': {'required': True}, 
                         'bol_number': {'required': True},
-                        'booking_end': {'required': True}} 
+                        'booking_end': {'required': False}} 
 
     def validate(self, attrs):
 

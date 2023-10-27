@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from laboratorios.models import Laboratorio
 from laboratorios.validators import LaboratorioValidator
-from random import randint, randrange
+from reservas.models import Reserva
 
 class LaboratorioSerializer(serializers.ModelSerializer):
 
@@ -19,7 +19,7 @@ class LaboratorioSerializer(serializers.ModelSerializer):
             'is_booked',
             'is_active',
             'price',
-            'user_id'
+            'user_id',
         ]
 
 
