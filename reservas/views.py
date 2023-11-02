@@ -112,6 +112,9 @@ class ReservaViewSet(viewsets.ModelViewSet):
 
             headers = self.get_success_headers(serializer.validated_data)
 
+            # print(serializer.validated_data['booking_start'])
+            
+
             boleto_number = serializer.validated_data.get('bol_number')
             url = "https://api-go-wash-efc9c9582687.herokuapp.com/api/pay-boleto"
             data = {'boleto': boleto_number, 'user_id': self.request.user.id, }

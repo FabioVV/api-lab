@@ -42,7 +42,6 @@ class UsuarioSerializer(serializers.ModelSerializer):
     password_confirmation = serializers.CharField(write_only=True,)
 
     #user_type = serializers.StringRelatedField(many=False)
-    
 
     class Meta:
         model = Usuario
