@@ -168,8 +168,10 @@ class MinhasReservas(APIView, ReservaV3paginacaoCustomizada):
         """
         Return a list of all the bookings of a user
         """
-
         check_bookings_expiration()
+
+
+
         bookings = Reserva.objects.filter(user = self.request.user).order_by('-id')
         result_page = self.paginate_queryset(bookings, request)
         bookings_data = ReservaSerializer(result_page, many=True)
@@ -189,17 +191,15 @@ class MinhasReservasSearch(APIView, ReservaV3paginacaoCustomizada):
 
         search = self.request.query_params.get('q','').strip()
         booked = self.request.query_params.get('booked','').strip()
-
         query = Q()
 
-        
         if search:
             query &= Q(laboratory__in = Laboratorio.objects.filter(name__icontains=search))
 
         if booked == 'R':
-            query &= Q(laboratory__in = Laboratorio.objects.filter(is_booked=True))
+            query &= Q(is_active = True)
         elif booked == 'N':
-            query &= Q(laboratory__in = Laboratorio.objects.filter(is_booked=False))
+            query &= Q(is_active = False)
         elif booked == '':
             pass
 
