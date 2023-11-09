@@ -10,12 +10,12 @@ class Reserva(db.Model):
 
     bol_number = db.CharField(max_length=8, blank=True, null=True)
     
-    booked_at = db.DateTimeField(auto_now_add=True)
     booking_end = db.DateTimeField()
     booking_start = db.DateTimeField(blank=True, null=True)
 
-
+    booked_at = db.DateTimeField(auto_now_add=True)
     updated_at = db.DateTimeField(auto_now=True)
+    
     is_active = db.BooleanField(default=True)
 
 

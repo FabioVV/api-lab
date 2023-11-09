@@ -20,6 +20,7 @@ class ReservaSerializer(serializers.ModelSerializer):
             'user',
             'user_name',
             'booked_at',
+            'updated_at',
             'bol_number',
             'is_active',
             'username',
