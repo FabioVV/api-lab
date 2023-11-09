@@ -28,7 +28,7 @@ class UsuarioValidator:
         password2 = self.data.get('password_confirmation')
 
         if password != password2:
-            self.errors[password].append('The passwords must match.')
+            self.errors[password].append('As senhas precisam ser iguais.')
     
 
 
