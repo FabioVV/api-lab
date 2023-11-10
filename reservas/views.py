@@ -67,6 +67,7 @@ class ReservaViewSet(viewsets.ModelViewSet):
 
     def partial_update(self, request, *args, **kwargs):
         reserva = self.get_object()
+        check_bookings_expiration()
 
 
         old_lab = Laboratorio.objects.get(Q(id = reserva.laboratory.id))
@@ -104,6 +105,7 @@ class ReservaViewSet(viewsets.ModelViewSet):
 
 
     def create(self, request, *args, **kwargs):
+        check_bookings_expiration()
 
         if self.request.user.user_type == Usuario_tipo.objects.get(id = 2) or self.request.user.is_staff or self.request.user.is_superuser:
 
@@ -113,15 +115,17 @@ class ReservaViewSet(viewsets.ModelViewSet):
             headers = self.get_success_headers(serializer.validated_data)
 
             # print(serializer.validated_data['booking_start'])
-            
+
+            booking_start = serializer.validated_data.get('booking_start','')
 
             boleto_number = serializer.validated_data.get('bol_number')
             url = "https://api-go-wash-efc9c9582687.herokuapp.com/api/pay-boleto"
             data = {'boleto': boleto_number, 'user_id': self.request.user.id, }
 
+            
             request = r.post(url, data=data, headers={ 'Authorization': 'Vf9WSyYqnwxXODjiExToZCT9ByWb3FVsjr' })
-
             if request.status_code == 200:
+
                 request = request.json()
 
                 lab_now_booked = Laboratorio.objects.get(id = serializer.validated_data.get('laboratory').id)
@@ -132,6 +136,9 @@ class ReservaViewSet(viewsets.ModelViewSet):
                 return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
             else:
                 return Response(status=status.HTTP_400_BAD_REQUEST, data={'error_payment':'O pagamento falhou. Por favor, tente novamente ou entre em contato com o nosso time.'})
+            
+
+
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST, data={'error_booking':'Apenas professores, funcionários e administradores podem fazer reservas.'})
 
@@ -139,6 +146,7 @@ class ReservaViewSet(viewsets.ModelViewSet):
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         destroy_instance = self.perform_destroy(instance)
+        check_bookings_expiration()
 
         if destroy_instance == None:
             return Response(status=status.HTTP_204_NO_CONTENT)
