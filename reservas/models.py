@@ -31,4 +31,15 @@ class Reserva(db.Model):
                 lab.save()
                 reserva.save()
                 return True
+        elif self.booking_start is None and timezone.now() >= self.booked_at:
+            if timezone.now() > self.booking_end:
+                reserva = Reserva.objects.get(id = self.id)
+                lab = Laboratorio.objects.get(id = reserva.laboratory.id)
+
+                lab.is_booked = False
+                reserva.is_active = False
+
+                lab.save()
+                reserva.save()
+                return True
     
