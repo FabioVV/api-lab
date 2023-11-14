@@ -20,6 +20,8 @@ class LaboratorioSerializer(serializers.ModelSerializer):
             'is_active',
             'price',
             'user_id',
+            'created_at',
+            'updated_at',
         ]
 
 
